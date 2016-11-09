@@ -1,0 +1,7 @@
+#Wed Nov 09 11:42:46 CET 2016
+base.0=/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_13abcf21e62eb358f90a25caa4fb092c05346881
+renamed.1=classes.dex
+renamed.0=classes2.dex
+file.1=/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_a2c519aa3df3637c34e1cd4495b60425b3ca4928/classes.dex
+base.1=/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_a2c519aa3df3637c34e1cd4495b60425b3ca4928
+file.0=/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_13abcf21e62eb358f90a25caa4fb092c05346881/classes.dex

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<instant-run
+    abi="armeabi-v7a,armeabi"
+    api-level="23"
+    density="xxhdpi"
+    format="8"
+    plugin-version="2.2.1"
+    timestamp="1017043100797520"
+    token="-8313887640868224818"
+    verifier="COMPATIBLE" >
+
+    <task
+        name="javac"
+        duration="0" />
+    <task
+        name="instant-run-dex"
+        duration="0" />
+    <task
+        name="instant-run-transform"
+        duration="0" />
+    <task
+        name="verifier"
+        duration="0" />
+
+    <artifact
+        location="/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/instant-run-resources/resources-debug.ir.ap_"
+        type="RESOURCES" />
+
+    <build
+        timestamp="1016555902432324"
+        verifier="FULL_BUILD_REQUESTED" >
+        <artifact
+            location="/Users/obelix/Documents/udacity_code/PopularMovies/app/build/outputs/apk/app-debug.apk"
+            type="MAIN" />
+    </build>
+    <build
+        timestamp="1016747176298424"
+        verifier="COMPATIBLE" >
+        <artifact
+            location="/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/builds/debug/1016747176298424/classes.dex"
+            type="RELOAD_DEX" />
+    </build>
+    <build
+        timestamp="1017043100797520"
+        verifier="COMPATIBLE" >
+        <artifact
+            location="/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/instant-run-resources/resources-debug.ir.ap_"
+            type="RESOURCES" />
+    </build>
+
+</instant-run>

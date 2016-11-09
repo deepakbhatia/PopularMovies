@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">PopularMovies</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_movies_detail">Movie Information</string>
+    <string name="movie_poster_content_description">Movie Poster</string>
+    <string name="movie_plot_content_description">Movie Plot</string>
+    <string name="movie_rating_content_description">Movie Rating</string>
+    <string name="toolbar_content_description">Toolbar</string>
+    <string name="floating_button_content_description">Tap to</string>
+    <string name="movie_rating_text">Average Vote:%1$s</string>
+    <string name="popular_toggle">Popular</string>
+    <string name="top_rated_toggle">Top Rated</string>
+    <string name="no_connection_message">Cannot Update Movies List, as cannot detect network connection</string>
+    <string name="movies_list_fragment_tag">Movies</string>
+    <string name="movie_detail_content_description">Detail information for %1$s</string>
+    <string name="no_internet_movie_detail">No movies data available, there is no internet connection</string>
+    <string name="movie_detail_image_content_description">Poster image for %1$s</string>
+    <string name="movie_detail_title_content_description">Movie title is %1$s</string>
+    <string name="movie_detail_overview_content_description">Plot for movie %1$s is %2$s</string>
+    <string name="movies_detail_view">Detail Movies</string>
+    <string name = "movie_poster_in_list">Movie poster for %1$s</string>
+    <string name="movie_release">"Released on: %1$s"</string>
+    <string name="sort_menu_content_description">Tap to see popular or top-rated movies. By default, it shows popular movies.</string>
+    <string name="not_connected_snackbar_message">No internet connection. Please connect and refresh from the menu</string>
+
+    <string name="current_movie_selection">Movies</string>
+
+    <string-array name="sort_elements">
+        <item>Popular</item>
+        <item>Top Rated</item>
+    </string-array>
+
+    <!-- Strings for NOT for Translation -->
+    <string name="movie_db_base_url" translatable="false">api.themoviedb.org/3/movie/</string>
+    <string name="movie_db_poster_base_url" translatable="false">http://image.tmdb.org/t/p/</string>
+    <string name="popular_tag" translatable="false">popular</string>
+    <string name="top_rated_tag" translatable="false">top_rated</string>
+    <string name="movie_db_api_key_param" translatable="false">api_key</string>
+    <string name="movies_db_results_json_tag" translatable="false">results</string>
+    <string name="movies_db_results_json_poster_path" translatable="false">poster_path</string>
+    <string name="movies_db_results_overview" translatable="false">overview</string>
+    <string name="movies_db_results_original_title" translatable="false">original_title</string>
+    <string name="movies_db_results_original_language" translatable="false">original_language</string>
+    <string name="movies_db_results_user_rating" translatable="false">vote_average</string>
+    <string name="movies_db_poster_format" translatable="false">w185/</string>
+    <string name="release_date" translatable="false">release_date</string>
+     <string name="movie_detail_fragment_tag" translatable="false">MOVIE_DETAIL_FRAG</string>
+    <string name="current_grid_item" translatable="false">current_grid_item</string>
+    <string name="current_spinner_item" translatable="false">current_spinner_item</string>
+    <string name="date_format" translatable="false">yyyy-MM-dd</string>
+    <string name="Dismiss" translatable="false">DISMISS</string>
+    <string name="showing_connect_message" translatable="false">showing_connect_message</string>
+
+</resources>
