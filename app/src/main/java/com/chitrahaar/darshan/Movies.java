@@ -15,7 +15,7 @@ public class Movies implements Parcelable {
     private double movies_rating;
     private String original_language;
     private String release_date;
-
+    private String movie_id;
 
     public Movies()
     {
@@ -34,6 +34,8 @@ public class Movies implements Parcelable {
         this.original_language = in.readString();
 
         this.release_date = in.readString();
+
+        this.movie_id = in.readString();
     }
 
     public Movies(String movies_title,
@@ -109,6 +111,7 @@ public class Movies implements Parcelable {
             dest.writeDouble(movies_rating);
             dest.writeString(original_language);
             dest.writeString(release_date);
+            dest.writeString(movie_id);
     }
 
     public static final Parcelable.Creator<Movies> CREATOR
@@ -128,5 +131,13 @@ public class Movies implements Parcelable {
 
     public void setRelease_date(String release_date) {
         this.release_date = release_date;
+    }
+
+    public String getMovie_id() {
+        return movie_id;
+    }
+
+    public void setMovie_id(String movie_id) {
+        this.movie_id = movie_id;
     }
 }

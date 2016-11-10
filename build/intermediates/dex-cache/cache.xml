@@ -7,7 +7,7 @@
         jumboMode="true"
         optimize="true"
         revision="24.0.0"
-        sha1="9aa89f50ca85108175140633aeafe07bf6b64b02">
+        sha1="0aefd8327d8df71df89c6fa8f1b9232169f5af41">
         <dex dex="/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_a2c519aa3df3637c34e1cd4495b60425b3ca4928/classes.dex" />
     </item>
     <item
@@ -97,7 +97,7 @@
         jumboMode="true"
         optimize="true"
         revision="24.0.0"
-        sha1="67f45fc8bda6f839ba9b8623cd79e8efa32facde">
+        sha1="fcdf5f8a157aec184ef7efd88caedfffd70c19eb">
         <dex dex="/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_13abcf21e62eb358f90a25caa4fb092c05346881/classes.dex" />
     </item>
     <item

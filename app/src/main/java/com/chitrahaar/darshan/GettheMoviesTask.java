@@ -162,6 +162,7 @@ public class GettheMoviesTask extends AsyncTask<String,String,ArrayList<Movies>>
 
                 );
 
+                movie.setMovie_id(movieObject.getString("id"));
                 movies_list.add(movie);
 
             }

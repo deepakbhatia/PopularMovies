@@ -1,5 +1,30 @@
 <resources>
-    <string name="app_name">PopularMovies</string>
+
+    <!-- Strings for NOT for Translation -->
+    <string name="app_name" translatable="false">PopularMovies</string>
+    <string name="movie_db_base_url" translatable="false">api.themoviedb.org/3/movie/</string>
+    <string name="find_trailer" translatable="false">%1$s/videos</string>
+    <string name="movie_db_poster_base_url" translatable="false">http://image.tmdb.org/t/p/</string>
+    <string name="popular_tag" translatable="false">popular</string>
+    <string name="top_rated_tag" translatable="false">top_rated</string>
+    <string name="movie_db_api_key_param" translatable="false">api_key</string>
+    <string name="movies_db_results_json_tag" translatable="false">results</string>
+    <string name="movies_db_results_json_poster_path" translatable="false">poster_path</string>
+    <string name="movies_db_results_overview" translatable="false">overview</string>
+    <string name="movies_db_results_original_title" translatable="false">original_title</string>
+    <string name="movies_db_results_original_language" translatable="false">original_language</string>
+    <string name="movies_db_results_user_rating" translatable="false">vote_average</string>
+    <string name="movies_db_poster_format" translatable="false">w185/</string>
+    <string name="release_date" translatable="false">release_date</string>
+    <string name="movie_detail_fragment_tag" translatable="false">MOVIE_DETAIL_FRAG</string>
+    <string name="current_grid_item" translatable="false">current_grid_item</string>
+    <string name="current_spinner_item" translatable="false">current_spinner_item</string>
+    <string name="date_format" translatable="false">yyyy-MM-dd</string>
+    <string name="Dismiss" translatable="false">DISMISS</string>
+    <string name="showing_connect_message" translatable="false">showing_connect_message</string>
+    <string name="youtube_watch_uri" translatable="false">https://www.youtube.com/watch?v=%1$s</string>
+
+
     <string name="action_settings">Settings</string>
     <string name="title_activity_movies_detail">Movie Information</string>
     <string name="movie_poster_content_description">Movie Poster</string>
@@ -22,33 +47,14 @@
     <string name="movie_release">"Released on: %1$s"</string>
     <string name="sort_menu_content_description">Tap to see popular or top-rated movies. By default, it shows popular movies.</string>
     <string name="not_connected_snackbar_message">No internet connection. Please connect and refresh from the menu</string>
-
     <string name="current_movie_selection">Movies</string>
-
     <string-array name="sort_elements">
         <item>Popular</item>
         <item>Top Rated</item>
     </string-array>
+    <string name="play_movie_trailer">Play Movie Trailer</string>
+    <string name="play_movie_trailer_content_description">Play Trailer for %1$s</string>
+    <string name="cannot_find_trailer">Sorry cannot find trailer from themoviedb.org</string>
 
-    <!-- Strings for NOT for Translation -->
-    <string name="movie_db_base_url" translatable="false">api.themoviedb.org/3/movie/</string>
-    <string name="movie_db_poster_base_url" translatable="false">http://image.tmdb.org/t/p/</string>
-    <string name="popular_tag" translatable="false">popular</string>
-    <string name="top_rated_tag" translatable="false">top_rated</string>
-    <string name="movie_db_api_key_param" translatable="false">api_key</string>
-    <string name="movies_db_results_json_tag" translatable="false">results</string>
-    <string name="movies_db_results_json_poster_path" translatable="false">poster_path</string>
-    <string name="movies_db_results_overview" translatable="false">overview</string>
-    <string name="movies_db_results_original_title" translatable="false">original_title</string>
-    <string name="movies_db_results_original_language" translatable="false">original_language</string>
-    <string name="movies_db_results_user_rating" translatable="false">vote_average</string>
-    <string name="movies_db_poster_format" translatable="false">w185/</string>
-    <string name="release_date" translatable="false">release_date</string>
-     <string name="movie_detail_fragment_tag" translatable="false">MOVIE_DETAIL_FRAG</string>
-    <string name="current_grid_item" translatable="false">current_grid_item</string>
-    <string name="current_spinner_item" translatable="false">current_spinner_item</string>
-    <string name="date_format" translatable="false">yyyy-MM-dd</string>
-    <string name="Dismiss" translatable="false">DISMISS</string>
-    <string name="showing_connect_message" translatable="false">showing_connect_message</string>
 
 </resources>

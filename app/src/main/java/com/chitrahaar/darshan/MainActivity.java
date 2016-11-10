@@ -9,7 +9,7 @@ import android.view.MenuItem;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MainActivityFragment.MoviesListCallback, MainActivityFragment.MovieSelectionCallback {
+public class MainActivity extends AppCompatActivity implements MainActivityFragment.MoviesListCallback, MainActivityFragment.MovieSelectionCallback, TrailerReviewTask.TrailerInterface {
 
     private boolean mTwoPane;
 
@@ -70,6 +70,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
     }
 
 
+    private void getMovieTrailer(Movies selected_movie)
+    {
+        TrailerReviewTask trailerReviewTask = new TrailerReviewTask(this,this);
+
+        trailerReviewTask.execute( selected_movie.getMovie_id());
+
+    }
     @Override
     public void onMovieItemSelected(Movies selected_movie) {
 
@@ -77,7 +84,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
+            getMovieTrailer(selected_movie);
+
             twoPaneDetailView(selected_movie);
+
 
 
         }else {
@@ -91,12 +101,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 
     }
 
+    private MovieDetailFragment fragment;
     private void twoPaneDetailView(Movies selected_movie)
     {
         Bundle args = new Bundle();
         args.putParcelable(getResources().getString(R.string.movies_detail_view), selected_movie);
 
-        MovieDetailFragment fragment = new MovieDetailFragment();
+        fragment = new MovieDetailFragment();
         fragment.setArguments(args);
 
         getSupportFragmentManager().beginTransaction()
@@ -108,8 +119,46 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
     public void gotMoviesList(ArrayList<Movies> moviesList) {
         //
         if (mTwoPane) {
-            twoPaneDetailView(moviesList.get(0));
+            Movies selected_movie = moviesList.get(0);
+            getMovieTrailer(selected_movie);
+            twoPaneDetailView(selected_movie);
+
 
         }
+    }
+
+    @Override
+    public void getTrailer(String video_id, boolean network_error, boolean parse_error) {
+        String youtube_url = null;
+
+        if (mTwoPane) {
+
+            if(video_id!=null)
+            {
+                youtube_url = String .format(getString(R.string.youtube_watch_uri),video_id);
+            }
+
+            if(fragment!=null)
+            {
+                fragment.updateMovieDetail(youtube_url);
+
+            }
+            /*else{
+                Bundle arguments = new Bundle();
+
+                arguments.putParcelable(getResources().getString(R.string.movies_detail_view), selected_movie);
+                arguments.putString("trailer_url",youtube_url);
+
+                fragment = new MovieDetailFragment();
+                fragment.setArguments(arguments);
+
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.movie_detail_container, fragment)
+                        .commit();
+
+
+            }*/
+        }
+
     }
 }

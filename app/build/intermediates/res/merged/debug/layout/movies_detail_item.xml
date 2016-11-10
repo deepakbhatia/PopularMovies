@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView
+    android:id="@+id/target_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -84,6 +85,13 @@
             android:contentDescription="@string/movie_rating_content_description"
             style="@style/MovieDetailStyle"
              />
+        <Button
+            android:id="@+id/play_trailer"
+            android:text="@string/play_movie_trailer"
+            android:layout_below="@+id/movie_rating"
+            android:contentDescription="@string/play_movie_trailer_content_description"
+            style="@style/MovieDetailStyle"
+            />
     </RelativeLayout>
 </android.support.v7.widget.CardView>
 </ScrollView>
