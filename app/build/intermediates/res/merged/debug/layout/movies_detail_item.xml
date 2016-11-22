@@ -1,97 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView
+<RelativeLayout
     android:id="@+id/target_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-
     >
-<android.support.v7.widget.CardView
-    android:id="@+id/movie_card_view"
+<ScrollView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:id="@+id/movie_detail_layout"
     >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:layout_height="wrap_content">
 
-        >
-        <TextView
-            android:id="@+id/movie_title"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentTop="true"
-            android:textSize="@dimen/movie_title_text_size"
-            android:gravity="center"
-            style="@style/MovieDetailStyle"
 
-            />
-        <View
-            style="@style/LineSeparatorStyle"
-            android:id="@+id/title_separator"
-            android:layout_below="@+id/movie_title"
-        />
-
-        <RelativeLayout
-            android:id="@+id/movie_image_overview_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/title_separator"
-            >
-            <LinearLayout
-                android:id="@+id/image_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/movie_image"
-                    android:contentDescription="@string/movie_poster_content_description"
-                    android:layout_width="fill_parent"
+                <LinearLayout
+                    android:id="@+id/movie_title_layout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    android:background="@color/colorItemSelected"
+                    android:padding="36dp"
+                    android:orientation="vertical">
                 <TextView
-                    android:id="@+id/movie_release"
-                    android:layout_toRightOf="@+id/movie_image"
-                    android:layout_above="@+id/movie_overview"
-                    android:textSize="@dimen/movie_rating_size"
+                    android:id="@+id/movie_title"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentTop="true"
+                    android:textSize="@dimen/movie_title_text_size"
                     android:gravity="center"
-                    android:textStyle="italic"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                      />
-            </LinearLayout>
+                    style="@style/MovieDetailStyle"
 
-            <TextView
-                android:id="@+id/movie_overview"
-                android:layout_below="@+id/image_layout"
-                android:contentDescription="@string/movie_plot_content_description"
-                android:textSize="@dimen/movie_overview_text_size"
-                style="@style/MovieDetailStyle"  />
-        </RelativeLayout>
-        <View
-            style="@style/LineSeparatorStyle"
-            android:layout_below="@+id/movie_image_overview_layout"
-            android:id="@+id/movie_rating_separator"
-        />
-        <TextView
-            android:id="@+id/movie_rating"
-            android:layout_below="@+id/movie_rating_separator"
-            android:textSize="@dimen/movie_rating_size"
-            android:contentDescription="@string/movie_rating_content_description"
-            style="@style/MovieDetailStyle"
-             />
-        <Button
-            android:id="@+id/play_trailer"
-            android:text="@string/play_movie_trailer"
-            android:layout_below="@+id/movie_rating"
-            android:contentDescription="@string/play_movie_trailer_content_description"
-            style="@style/MovieDetailStyle"
-            />
-    </RelativeLayout>
-</android.support.v7.widget.CardView>
+                    />
+                </LinearLayout>
+                <View
+                    style="@style/LineSeparatorStyle"
+                    android:id="@+id/title_separator"
+                    android:layout_below="@+id/movie_title_layout"
+                />
+
+                <RelativeLayout
+                    android:id="@+id/movie_image_overview_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/title_separator"
+                    >
+                    <LinearLayout
+                        android:id="@+id/image_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/movie_image"
+                            android:contentDescription="@string/movie_poster_content_description"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
+                        <RelativeLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+
+                            >
+                            <TextView
+                                android:id="@+id/movie_release"
+                                android:textSize="@dimen/movie_rating_size"
+                                android:textStyle="italic"
+                                android:layout_centerHorizontal="true"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                  />
+                            <Button
+                                android:id="@+id/movie_favourite"
+                                android:layout_below="@+id/movie_release"
+                                android:text="@string/add_to_favourite"
+                                android:contentDescription="@string/add_movie_to_favourite_content_description"
+                                android:layout_centerHorizontal="true"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@mipmap/ic_action_grade"
+                                style="@style/Widget.AppCompat.Button.Colored"
+                                />
+
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/movie_overview"
+                        android:layout_below="@+id/image_layout"
+                        android:contentDescription="@string/movie_plot_content_description"
+                        android:textSize="@dimen/movie_overview_text_size"
+                        style="@style/MovieDetailStyle"  />
+                </RelativeLayout>
+                <View
+                    style="@style/LineSeparatorStyle"
+                    android:layout_below="@+id/movie_image_overview_layout"
+                    android:id="@+id/movie_rating_separator"
+                />
+                <TextView
+                    android:id="@+id/movie_rating"
+                    android:layout_below="@+id/movie_rating_separator"
+                    android:textSize="@dimen/movie_rating_size"
+                    android:contentDescription="@string/movie_rating_content_description"
+                    style="@style/MovieDetailStyle"
+                     />
+
+
+
+            </RelativeLayout>
+
+
 </ScrollView>
+
+    <View
+        style="@style/LineSeparatorStyle"
+        android:layout_below="@+id/movie_detail_layout"
+        android:id="@+id/trailer_separator"
+        />
+
+</RelativeLayout>
+

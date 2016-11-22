@@ -9,6 +9,7 @@ import android.os.Parcelable;
 
 public class Movies implements Parcelable {
 
+
     private String movies_title;
     private String movie_image_url;
     private String movies_overview;
@@ -16,6 +17,10 @@ public class Movies implements Parcelable {
     private String original_language;
     private String release_date;
     private String movie_id;
+    private String favourite;
+    private int movie_list;
+
+    private byte[] posterBytes;
 
     public Movies()
     {
@@ -36,6 +41,15 @@ public class Movies implements Parcelable {
         this.release_date = in.readString();
 
         this.movie_id = in.readString();
+
+        this.favourite = in.readString();
+
+        this.movie_list = in.readInt();
+
+        posterBytes = new byte[in.readInt()];
+
+        in.readByteArray(posterBytes);
+
     }
 
     public Movies(String movies_title,
@@ -57,6 +71,7 @@ public class Movies implements Parcelable {
         this.original_language = original_language;
 
         this.release_date = release_date;
+
     }
     public String getMovies_title() {
         return movies_title;
@@ -112,6 +127,10 @@ public class Movies implements Parcelable {
             dest.writeString(original_language);
             dest.writeString(release_date);
             dest.writeString(movie_id);
+            dest.writeString(favourite);
+            dest.writeInt(movie_list);
+        dest.writeInt(posterBytes.length);
+        dest.writeByteArray(posterBytes);
     }
 
     public static final Parcelable.Creator<Movies> CREATOR
@@ -139,5 +158,31 @@ public class Movies implements Parcelable {
 
     public void setMovie_id(String movie_id) {
         this.movie_id = movie_id;
+    }
+
+    public String getFavourite() {
+        return favourite;
+    }
+
+    public void setFavourite(String favourite) {
+        this.favourite = favourite;
+    }
+
+
+
+    public int getMovie_list() {
+        return movie_list;
+    }
+
+    public void setMovie_list(int movie_list) {
+        this.movie_list = movie_list;
+    }
+
+    public byte[] getPosterBytes(){
+        return posterBytes;
+    }
+
+    public void setPosterBytes(byte[] posterBytes){
+        this.posterBytes = posterBytes;
     }
 }

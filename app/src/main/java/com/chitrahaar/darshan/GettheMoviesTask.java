@@ -3,6 +3,8 @@ package com.chitrahaar.darshan;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
@@ -41,7 +43,7 @@ public class GettheMoviesTask extends AsyncTask<String,String,ArrayList<Movies>>
     //Zero Argument Constructor
     public GettheMoviesTask() {}
 
-    public GettheMoviesTask(Context context, ReturnMovies returnMovies)
+    public GettheMoviesTask(@NonNull Context context, @NonNull ReturnMovies returnMovies)
     {
         this.context = context;
 
@@ -54,7 +56,7 @@ public class GettheMoviesTask extends AsyncTask<String,String,ArrayList<Movies>>
     String moviesJSON = null;
 
     @Override
-    protected ArrayList<Movies> doInBackground(String[] params) {
+    protected @Nullable ArrayList<Movies> doInBackground(String[] params) {
 
         String sort_type = params[0];
         String url_string = context.getString(R.string.movie_db_base_url)+sort_type;
@@ -132,7 +134,7 @@ public class GettheMoviesTask extends AsyncTask<String,String,ArrayList<Movies>>
     }
 
 
-    private ArrayList<Movies> getMoviesList(String moviesJSON)
+    private ArrayList<Movies> getMoviesList(@NonNull String moviesJSON)
     {
 
         //List of movies for adapter
@@ -146,6 +148,7 @@ public class GettheMoviesTask extends AsyncTask<String,String,ArrayList<Movies>>
             {
                 JSONObject movieObject = moviesJSONArray.getJSONObject(movies_index);
 
+                //TODO
                 Log.d(LOG_TAG,movieObject.getString(context.getString(R.string.movies_db_results_json_poster_path)));
                 Movies movie = new Movies(
                         movieObject.getString(context.getString(R.string.movies_db_results_original_title)),

@@ -5,6 +5,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="movie_title_text_size">22sp</dimen>
     <dimen name="movie_overview_text_size">16sp</dimen>
-    <dimen name="movie_rating_size">12sp</dimen>
+    <dimen name="movie_rating_size">14sp</dimen>
     <dimen name="element_margin">8dp</dimen>
 </resources>

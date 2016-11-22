@@ -26,7 +26,7 @@
         android:id="@+id/movie_grid_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+        android:layout_gravity="center"
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:drawablePadding="@dimen/element_margin"
         android:padding="@dimen/activity_horizontal_margin"
