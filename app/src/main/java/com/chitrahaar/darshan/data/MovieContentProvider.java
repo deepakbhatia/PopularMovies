@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.util.Log;
 
-import com.chitrahaar.darshan.Utility;
+import com.chitrahaar.darshan.R;
 
 public class MovieContentProvider extends ContentProvider {
     public MovieContentProvider() {
@@ -26,10 +26,9 @@ public class MovieContentProvider extends ContentProvider {
     static final int MOVIES_POPULAR = 103;
     static final int MOVIES_FAVOURITE = 104;
 
-    static final String FAVOURITE_MOVIE_YES = "YES";
-
-    static final String FAVOURITE_MOVIE_NO = "NO";
-
+    public static int POPULAR_LIST = 1;
+    public static int TOP_RATED_LIST = 2;
+    public static int BOTH_LIST = 3;
 
     private static final SQLiteQueryBuilder sMovieQueryBuilder;
 
@@ -80,10 +79,10 @@ public class MovieContentProvider extends ContentProvider {
                 retCursor = getSpecificMovie(uri, projection, sortOrder);
                 break;
             case MOVIES_TOPRATED:
-                retCursor = getCategoryMovies(uri, projection, sortOrder, ""+Utility.TOP_RATED_LIST);
+                retCursor = getCategoryMovies(uri, projection, sortOrder, ""+TOP_RATED_LIST);
                 break;
             case MOVIES_POPULAR:
-                retCursor = getCategoryMovies(uri, projection, sortOrder, ""+Utility.POPULAR_LIST);
+                retCursor = getCategoryMovies(uri, projection, sortOrder, ""+POPULAR_LIST);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -234,7 +233,7 @@ public class MovieContentProvider extends ContentProvider {
     //use this method to get a list of either toprated or popular movies
     private Cursor getFavouriteMovies(Uri uri, String[] projection, String sortOrder) {
         String[] selectionArgs;
-        selectionArgs = new String[]{FAVOURITE_MOVIE_YES};
+        selectionArgs = new String[]{getContext().getString(R.string.yes)};
         String selection = sIsFavouriteMovieSelection;
         return sMovieQueryBuilder.query(mDbHelper.getReadableDatabase(),
                 projection,

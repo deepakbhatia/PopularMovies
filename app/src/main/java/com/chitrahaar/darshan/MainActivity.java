@@ -98,16 +98,7 @@ public class MainActivity extends AppCompatActivity implements
                 .commit();
     }
 
-   /* @Override
-    public void gotMoviesList(ArrayList<Movies> moviesList) {
-        //
-        if (mTwoPane) {
-            Movies selected_movie = moviesList.get(0);
-            //TODO Previous Version
-            //twoPaneDetailView(selected_movie);
 
-        }
-    }*/
 
              @Override
              public void onItemSelected(Uri selectedMovieUri) {

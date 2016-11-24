@@ -61,8 +61,6 @@ public class TrailersTask extends AsyncTask<String, String, ArrayList<Object>> {
 
             String movie_db_query_url = builder.build().toString();
 
-            //TODO
-            Log.d(LOG_TAG,movie_db_query_url);
             //Build the URL Object
             URL url = new URL(movie_db_query_url);
 
@@ -104,6 +102,8 @@ public class TrailersTask extends AsyncTask<String, String, ArrayList<Object>> {
         {
             network_error = true;
             trailer_list = null;
+            Log.e(LOG_TAG,ex.toString());
+
         }
         catch (IOException ex)
         {
@@ -115,10 +115,6 @@ public class TrailersTask extends AsyncTask<String, String, ArrayList<Object>> {
     }
 
     private ArrayList<Object> parse(String trailer){
-
-        //TODO
-        Log.d(LOG_TAG,trailer);
-
 
         String trailer_id = null;
 
@@ -132,9 +128,6 @@ public class TrailersTask extends AsyncTask<String, String, ArrayList<Object>> {
             for(int trailers_index=0 ; trailers_index< trailerJSONArray.length(); trailers_index++)
             {
                 JSONObject trailerObject = trailerJSONArray.getJSONObject(trailers_index);
-
-                //TODO CLEAN
-                Log.d(LOG_TAG,trailerObject.toString());
 
                 trailer_id = trailerObject.getString("key");
 
@@ -153,16 +146,11 @@ public class TrailersTask extends AsyncTask<String, String, ArrayList<Object>> {
             e.printStackTrace();
         }
 
-        //TODO
-        Log.d(LOG_TAG,"trailer:"+trailer_id);
-
-
         return trailer_list;
     }
     @Override
     protected void onPostExecute(ArrayList<Object> trailers) {
-        //TODO
-        //Log.d(LOG_TAG,result);
+
         ViewHeaders trailer_header = new ViewHeaders(context.getString(R.string.trailers_section_label));
 
         ArrayList<Object> headerList = new ArrayList<>();

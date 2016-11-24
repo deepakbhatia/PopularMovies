@@ -16,6 +16,8 @@ public class Utility {
     public static int TOP_RATED_LIST = 2;
     public static int BOTH_LIST = 3;
     public static int FAVOURITE_LIST = 4;
+    public static String YES = "YES";
+    public static String NO = "NO";
 
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager

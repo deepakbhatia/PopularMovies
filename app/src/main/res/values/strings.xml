@@ -88,6 +88,9 @@
     <string name="sortPreferences">sortPreferences</string>
     <string name="currentPreferences">currentPreferences</string>
     <string name="send_to">Share Trailer to</string>
+    <string name="no_movie_data_available">No movie data available from themoviedb.org</string>
+    <string name="no">NO</string>
+    <string name="yes">YES</string>
 
 
 </resources>

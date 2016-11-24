@@ -2,7 +2,6 @@ package com.chitrahaar.darshan;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +35,7 @@ public class ReviewsAdapter extends ArrayAdapter<Reviews> {
     }
 
     public int getCount() {
-        //TODO
-        Log.d("reviewsAdapter:count",""+this.reviewsList.size());
+
         return this.reviewsList.size();
     }
 

@@ -132,12 +132,12 @@
         "source": "/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.2.1/res/drawable/abc_btn_colored_material.xml"
     },
     {
-        "merged": "/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/res/merged/debug/drawable/play_trailer_button_state.xml",
-        "source": "/Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/res/drawable/play_trailer_button_state.xml"
-    },
-    {
         "merged": "/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/res/merged/debug/drawable/abc_ic_menu_overflow_material.xml",
         "source": "/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.2.1/res/drawable/abc_ic_menu_overflow_material.xml"
+    },
+    {
+        "merged": "/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/res/merged/debug/drawable/play_trailer_button_state.xml",
+        "source": "/Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/res/drawable/play_trailer_button_state.xml"
     },
     {
         "merged": "/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/res/merged/debug/drawable/abc_text_cursor_material.xml",

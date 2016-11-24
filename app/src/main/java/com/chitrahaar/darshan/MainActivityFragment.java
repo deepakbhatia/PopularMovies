@@ -12,7 +12,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,16 +29,14 @@ import android.widget.TextView;
 import com.chitrahaar.darshan.data.MovieDataContract;
 import com.chitrahaar.darshan.syncmovies.MovieSyncAdapter;
 
-import java.util.ArrayList;
-
 /**
- * A placeholder fragment containing a simple view.
+ * Fragment for displaying movie grid
  */
 public class MainActivityFragment extends Fragment implements
 
         AdapterView.OnItemClickListener,
 
-        LoaderManager.LoaderCallbacks<Cursor>{
+        LoaderManager.LoaderCallbacks<Cursor>, View.OnFocusChangeListener {
 
 
     private static String SELECTED_GRID_ITEM = null;
@@ -47,7 +44,6 @@ public class MainActivityFragment extends Fragment implements
 
     private GridView movies_gridview;
 
-    private MoviesAdapter moviesAdapter;
 
     public static MovieGridAdapter movieGridAdapter;
 
@@ -71,8 +67,6 @@ public class MainActivityFragment extends Fragment implements
 
     private Context res;
 
-    private ArrayList<Movies> returnedList;
-
     private  Snackbar connectRefresh;
 
     private static final int MOVIES_LOADER = 0;
@@ -92,17 +86,10 @@ public class MainActivityFragment extends Fragment implements
 
     };
 
-    static final int COL_MOVIE_ID = 0;
-    static final int COL_MOVIE_TITLE = 1;
-    static final int COL_RELEASEDATE = 2;
-    static final int COL_DESCRIPTION = 3;
-    static final int COL_RATING = 4;
+    static final int COLUMN_MOVIE_ID = 0;
+
     public static final int COLUMN_POSTER = 5;
-    static final int COL_TYPE_LIST = 6;
-    static final int COL_UPDATE_DATE = 7;
-    static final int COL_IS_FAVOURITE = 8;
-    static final int COL_ORIGINAL_LANGUAGE = 9;
-    static final int COL_POSTER_BLOB = 10;
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -124,10 +111,6 @@ public class MainActivityFragment extends Fragment implements
                 .appendPath(destinatioUri)
                 .build();
 
-        //TODO
-        Log.d("showMovieUri",showMovieUri.toString());
-
-
         return new CursorLoader(getActivity(),
                 showMovieUri,
                 MOVIE_COLUMNS,
@@ -136,45 +119,65 @@ public class MainActivityFragment extends Fragment implements
                 null);
     }
 
+    private void selectGridItem(int position){
+        Cursor cursor = (Cursor) movieGridAdapter.getItem(position);
+        if (cursor != null) {
+            ((Callback) res)
+                    .onItemSelected(MovieDataContract.MovieDataEntry.createMovieDataPath(
+                            cursor.getString(COLUMN_MOVIE_ID)
+                    ));
+
+            movies_gridview.setSelection(position);
+            movies_gridview.smoothScrollToPosition(position);
+            movies_gridview.setItemChecked(position,true);
+
+        }
+    }
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        //TODO
-        Log.d("movieGridAdapter",loader.toString());
-        movieGridAdapter.swapCursor(data);
+        int movieCount = data.getCount();
 
-        if(mTwoPane){
-            movies_gridview.post(new Runnable() {
-                @Override
-                public void run() {
-                    Cursor cursor = (Cursor) movieGridAdapter.getItem(0);
-                    if (cursor != null) {
-                        ((Callback) res)
-                                .onItemSelected(MovieDataContract.MovieDataEntry.createMovieDataPath(
-                                        cursor.getString(COL_MOVIE_ID)
-                                ));
+        if(movieCount > 0)
+        {
+            movieGridAdapter.swapCursor(data);
 
-                        movies_gridview.setSelection(0);
-                        movies_gridview.setItemChecked(0,true);
+            if(mTwoPane){
+                movies_gridview.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if(mPosition == GridView.INVALID_POSITION)
+                            mPosition = 0;
+                        selectGridItem(mPosition);
 
                     }
+                });
+            }
 
-
-                }
-            });
         }
 
-        if(data.isAfterLast())
+        //No Data was received, either due to no internet or no information in database
+        if(movieCount <= 0)
         {
+            progressBar.setVisibility(View.GONE);
+            ((TextView)empty_view).setText(res.getString(R.string.no_movie_data_available));
             empty_view.setVisibility(View.VISIBLE);
 
-            movies_gridview.setEmptyView(empty_view);
+            if(!Utility.isNetworkAvailable(getActivity())){
+                ((TextView)empty_view).setText(res.getString(R.string.no_connection_message));
+                ((TextView)empty_view).setCompoundDrawablesWithIntrinsicBounds(null,null,null,res.getResources().getDrawable(R.mipmap.ic_wifi));
+                notConnectedMessage();
+            }
+
+
         }
         else{
+            if(empty_view!=null)
             empty_view.setVisibility(View.GONE);
+            if(connectRefresh!=null && connectRefresh.isShown())
+                connectRefresh.dismiss();
         }
-        progressBar.setVisibility(View.GONE);
-        //progressBar.setVisibility(View.GONE);
 
     }
 
@@ -185,10 +188,19 @@ public class MainActivityFragment extends Fragment implements
 
     }
 
+    @Override
+    public void onFocusChange(View view, boolean b) {
+
+        //If the Gridview is in focus, hide the progressbar
+        if(view.getId() == R.id.movies_list){
+            if(b)
+                progressBar.setVisibility(View.GONE);
+        }
+
+    }
+
     public interface Callback {
-        /**
-         * DetailFragmentCallback for when an item has been selected.
-         */
+
         public void onItemSelected(Uri dateUri);
     }
 
@@ -206,20 +218,14 @@ public class MainActivityFragment extends Fragment implements
 
         root_view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        //relativeLayout = (RelativeLayout)root_view. findViewById(R.id.content_main);
+        relativeLayout = (RelativeLayout)root_view. findViewById(R.id.content_main);
         movies_gridview = (GridView) root_view.findViewById(R.id.movies_list);
         movies_gridview.setAdapter(movieGridAdapter);
-
-
+        movies_gridview.setOnFocusChangeListener(this);
 
         empty_view = root_view.findViewById(R.id.movie_grid_empty);
 
         progressBar = (ProgressBar) root_view.findViewById(R.id.arProgressBar);
-
-        //progressBar.
-        //empty_view.setVisibility(View.GONE);
-        //Display when there is no Data Available
-        //movies_gridview.setEmptyView(empty_view);
 
         movies_gridview.setOnItemClickListener(this);
 
@@ -236,14 +242,14 @@ public class MainActivityFragment extends Fragment implements
 
     private void notConnectedMessage()
     {
-        /*connectRefresh =  Snackbar.make(relativeLayout,getString(R.string.not_connected_snackbar_message),Snackbar.LENGTH_INDEFINITE);
+        connectRefresh =  Snackbar.make(relativeLayout,getString(R.string.not_connected_snackbar_message),Snackbar.LENGTH_INDEFINITE);
 
         connectRefresh.setAction(R.string.Dismiss, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 connectRefresh.dismiss();
             }
-        }).show();*/
+        }).show();
     }
 
     @Override
@@ -255,12 +261,12 @@ public class MainActivityFragment extends Fragment implements
 
             ((Callback) res)
                     .onItemSelected(MovieDataContract.MovieDataEntry.createMovieDataPath(
-                            cursor.getString(COL_MOVIE_ID)
+                            cursor.getString(COLUMN_MOVIE_ID)
                     ));
         }
     }
 
-    public void initializeLoder()
+    public void initializeLoader()
     {
         getLoaderManager().initLoader(MOVIES_LOADER, null,this);
 
@@ -270,14 +276,7 @@ public class MainActivityFragment extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 
-        Thread r = new Thread() {
-            @Override
-            public void run() {
-                initializeLoder();
-            }
-        };
 
-        r.run();
 
 
         if (savedInstanceState != null){
@@ -292,19 +291,21 @@ public class MainActivityFragment extends Fragment implements
 
 
             if (savedInstanceState.containsKey(SELECTED_GRID_ITEM)) {
-                // The listview probably hasn't even been populated yet.  Actually perform the
+                // The Gridview probably hasn't even been populated yet.  Actually perform the
                 // swapout in onLoadFinished.
+
                 mPosition = savedInstanceState.getInt(SELECTED_GRID_ITEM);
-                movies_gridview.setSelection(mPosition);
-                movies_gridview.smoothScrollToPosition(mPosition);
-                movies_gridview.setItemChecked(mPosition,true);
+                keyVal = mPosition;
+
             }
             if (savedInstanceState.containsKey(SELECTED_SPINNER_KEY)) {
 
                 spinnerSelection = savedInstanceState.getInt(SELECTED_SPINNER_KEY);
-
+                getMovies();
             }
         }
+        initializeLoader();
+
 
         super.onActivityCreated(savedInstanceState);
 
@@ -316,7 +317,6 @@ public class MainActivityFragment extends Fragment implements
         // When tablets rotate, the currently selected list item needs to be saved.
         // When no item is selected, mPosition will be set to Listview.INVALID_POSITION,
         // so check for that before storing.
-
         if (mPosition != GridView.INVALID_POSITION) {
             outState.putInt(SELECTED_GRID_ITEM, mPosition);
 
@@ -340,18 +340,11 @@ public class MainActivityFragment extends Fragment implements
 
     private void getMovies(){
 
-        //((TextView)empty_view).setText(R.string.no_connection_message);
-        //((TextView)empty_view).setContentDescription(getString(R.string.no_connection_message));
-        //((TextView)empty_view).setCompoundDrawablesWithIntrinsicBounds(null,null,null,getActivity().getResources().getDrawable(R.mipmap.ic_wifi));
-
-        String sortPref = null;
+       String sortPref = null;
         if (spinnerSelection == 0) {
             Utility.sort_type = (res.getString(R.string.popular_tag));
             sortPref =res.getString(R.string.popular_tag);
-            //TODO
-            Log.d("getMovies","getMovies"+spinnerSelection);
 
-            //executeTasks(getActivity().getString(R.string.popular_tag));
         } else if (spinnerSelection == 1){
             Utility.sort_type = res.getString(R.string.top_rated_tag);
             sortPref = res.getString(R.string.top_rated_tag);
@@ -366,6 +359,10 @@ public class MainActivityFragment extends Fragment implements
 
         }
 
+        //Reset selected grid view position
+
+
+        //Save Current Sort Criteria, so if user switches app and comes back, it displays the same list
         SharedPreferences sortPreferences = res.getSharedPreferences(getString(R.string.sortPreferences),Context.MODE_PRIVATE);
         SharedPreferences.Editor sortPrefEditor = sortPreferences.edit();
         sortPrefEditor.putString(getString(R.string.currentPreferences),sortPref);
@@ -409,8 +406,22 @@ public class MainActivityFragment extends Fragment implements
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                spinnerSelection = position; //Set position of the selected spinner item.
-                getMovies();
+
+                if(keyVal == -1)
+                {
+                    spinnerSelection = position;//Set position of the selected spinner item.
+
+                    //Reset the selected position when the spinner is triggerd by user rather than rotation.
+                    if(mTwoPane)
+                        mPosition = 0;
+                    else
+                        mPosition = GridView.INVALID_POSITION;
+
+                    getMovies();
+                }
+                else{
+                    keyVal = -1;
+                }
 
             }
 
@@ -433,6 +444,7 @@ public class MainActivityFragment extends Fragment implements
 
     }
 
+    //Tablet display
     public void setmTwoPane(boolean twopane){
         mTwoPane = twopane;
     }

@@ -2,7 +2,6 @@ package com.chitrahaar.darshan;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,8 +38,6 @@ public class MovieGridAdapter extends CursorAdapter {
         PosterHolder posterHolder = new PosterHolder(convertView);
         convertView.setTag(posterHolder);
 
-        //TODO
-        Log.d("PosterHolder", "PosterHolder");
         return convertView;
     }
 
@@ -53,10 +50,6 @@ public class MovieGridAdapter extends CursorAdapter {
          Picasso.with(context)
                 .load(context.getString(R.string.movie_db_poster_base_url) + context.getString(R.string.movies_db_poster_format) + cursor.getString(MainActivityFragment.COLUMN_POSTER))
                 .into(movie_image_view);
-
-        //TODO
-        Log.d("picasso", context.getString(R.string.movie_db_poster_base_url) + context.getString(R.string.movies_db_poster_format) + cursor.getString(MainActivityFragment.COLUMN_POSTER));
-        //image_load.into(movie_image_view);
     }
 
     /**

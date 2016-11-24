@@ -632,6 +632,7 @@
     <string name="no_favourite_created">You have no favourites</string>
     <string name="no_favourites_message">You have not favourites any movies</string>
     <string name="no_internet_movie_detail">No movies data available, there is no internet connection</string>
+    <string name="no_movie_data_available">No movie data available from themoviedb.org</string>
     <string name="no_reviews_found">No reviews available</string>
     <string name="no_trailer_videos_found">No Trailer Videos found</string>
     <string name="not_connected_snackbar_message">No internet connection. Please connect and refresh from the menu</string>

@@ -148,8 +148,6 @@ public class GettheMoviesTask extends AsyncTask<String,String,ArrayList<Movies>>
             {
                 JSONObject movieObject = moviesJSONArray.getJSONObject(movies_index);
 
-                //TODO
-                Log.d(LOG_TAG,movieObject.getString(context.getString(R.string.movies_db_results_json_poster_path)));
                 Movies movie = new Movies(
                         movieObject.getString(context.getString(R.string.movies_db_results_original_title)),
 

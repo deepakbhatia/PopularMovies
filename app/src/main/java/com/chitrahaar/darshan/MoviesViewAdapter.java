@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chitrahaar.darshan.data.MovieDataContract;
-import com.chitrahaar.darshan.data.MovieTestHelper;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
@@ -34,7 +33,7 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private static final int VIEW_TYPE_TRAILERS = 1;
     private static final int VIEW_TYPE_REVIEWS = 2;
     private static final int VIEW_TYPE_HEADERS = 5;
-    private static final String LOG_TAG = "MoviesViewAdapter";
+    private static final String LOG_TAG = MoviesViewAdapter.class.getName();
 
 
     // The items to display in your RecyclerView
@@ -43,13 +42,10 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private Context mContext;
 
     private ContentValues movieValues;
-    private static MovieTestHelper movieTestHelper;
     private static String movieTitle;
 
     public MoviesViewAdapter(Context context) {
         this.mContext = context;
-
-        movieTestHelper = new MovieTestHelper(this.mContext);
 
     }
     @Override
@@ -250,8 +246,7 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     trailerViewHolder.getTrailerPlay().setTag(trailer.getmTrailerKey());
                     trailerViewHolder.shareTrailerView.setTag(trailer.getmTrailerKey());
                 } else {
-                    //TODO
-                    Log.d("trailerViewHolder", "NO TRAILER");
+
                     trailerViewHolder.getNo_trailer_view().setVisibility(View.VISIBLE);
                     trailerViewHolder.getTrailerPlay().setVisibility(View.GONE);
                     trailerViewHolder.shareTrailerView.setVisibility(View.GONE);
@@ -432,11 +427,12 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                 final Movies movie = (Movies)view.getTag();
 
-                if(movie.getFavourite().equalsIgnoreCase("YES"))
+                if(movie.getFavourite().equalsIgnoreCase(mContext.getString(R.string.yes)))
+
                 {
                     ((Button)view).setContentDescription(String.format(mContext.getString(R.string.add_movie_to_favourite_content_description),movie.getMovies_title()));
                     movieValues = new ContentValues();
-                    movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_IS_FAVOURITE, "NO");
+                    movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_IS_FAVOURITE, mContext.getString(R.string.no));
                     movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_POSTER_BLOB, new byte[0]);
                     ((Button)view).setText(mContext.getString(R.string.add_to_favourite));
                     updateData(movieValues,movie);
@@ -457,7 +453,7 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
                                 movieValues = new ContentValues();
-                                movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_IS_FAVOURITE, "YES");
+                                movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_IS_FAVOURITE, mContext.getString(R.string.yes));
                                 movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_POSTER_BLOB, baos.toByteArray());
 
                                 int updateRecord = updateData(movieValues,movie);
@@ -479,49 +475,6 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 }
             }
         }
-
-
-            /*
-            if(view.getId() == R.id.movie_image){
-                ArrayList<byte[]> posterBytes = movieTestHelper.getAllCotacts();
-
-                Bitmap targetMap = BitmapFactory.decodeByteArray(posterBytes.get(0), 0, posterBytes.get(0).length);
-
-
-                mMoviePosterView.setImageBitmap(targetMap);
-
-            }
-            else{
-                final RequestCreator image_load = Picasso.with(mContext)
-                        .load(""+view.getTag());
-
-
-                Thread r = new Thread() {
-                    @Override
-                    public void run() {
-                        Bitmap bitmap = null;
-                        try {
-                            bitmap = image_load.get();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                        String imageEncoded = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
-
-
-                        movieTestHelper.insertByte(baos.toByteArray());
-
-
-
-
-                    }
-                };
-
-                r.start();
-            }
-*/
 
     }
 

@@ -50,6 +50,9 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
     private int sortType;
     Time dayTime;
     int julianStartDay;
+    public static int POPULAR_LIST = 1;
+    public static int TOP_RATED_LIST = 2;
+    public static int BOTH_LIST = 3;
     public MovieSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
 
@@ -159,16 +162,12 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
             for(int i =0;i < sortBy.length; i++)
             {
-                //TODO
-                Log.d(LOG_TAG, "Starting sync:syncNow == null");
                 syncAction(sortBy[i]);
             }
         }
         else{
             if(syncNow.equals(getContext().getString(R.string.favourite)))
                 return;
-            //TODO
-            Log.d(LOG_TAG, "Starting sync:syncNow != null");
             syncAction(syncNow);
         }
 
@@ -191,8 +190,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
                 long dateTime = dayTime.setJulianDay(julianStartDay+movies_index);
                 JSONObject movieObject = moviesJSONArray.getJSONObject(movies_index);
 
-                //TODO
-                Log.d(LOG_TAG,movieObject.getString(this.getContext().getString(R.string.movies_db_results_json_poster_path)));
+
                 Movies movie = new Movies(
                         movieObject.getString(this.getContext().getString(R.string.movies_db_results_original_title)),
 
@@ -212,13 +210,13 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 if(sort_type.contains(this.getContext().getString(R.string.popular_tag)))
                 {
-                    sortType = Utility.POPULAR_LIST;
-                    movie.setMovie_list(Utility.POPULAR_LIST);
+                    sortType = 1;
+                    movie.setMovie_list(POPULAR_LIST);
                 }
                 else
                 {
-                    sortType = Utility.TOP_RATED_LIST;
-                    movie.setMovie_list(Utility.TOP_RATED_LIST);
+                    sortType = TOP_RATED_LIST;
+                    movie.setMovie_list(TOP_RATED_LIST);
                 }
 
                 insertMoviedata(movie, dateTime);
@@ -241,7 +239,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
                 MovieDataContract.MovieDataEntry.COLUMN_UPDATE_DATE + " <= ?" +
                 " AND " + MovieDataContract.MovieDataEntry.COLUMN_IS_FAVOURITE + " = ?"+
                         " AND " + MovieDataContract.MovieDataEntry.COLUMN_TYPE_LIST + " = ?",
-                new String[] {Long.toString(dayTime.setJulianDay(julianStartDay-1)),"NO",Integer.toString(sortType)});
+                new String[] {Long.toString(dayTime.setJulianDay(julianStartDay-1)),getContext().getString(R.string.no),Integer.toString(sortType)});
 
     }
 
@@ -253,9 +251,6 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
         // get the id of the movie
         String movieID=""+ mMovie.getMovie_id();
-
-        //TODO
-        //Log.d("insertUri",movieID);
 
         // First, check if the movie  exists in the db
         Cursor movieCursor = getContext().getContentResolver().query(
@@ -269,23 +264,18 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         if (movieCursor!=null && movieCursor.moveToFirst() ) {
 
 
-            //TODO
-            Log.d("movieCursor",movieID);
-
-
             //update the record rating to retrieve the latest rating
             ContentValues movieValues = new ContentValues();
-            //TODO
-            //Log.d("movieValues",movieValues.toString());
+
             int type = movieCursor.getInt(movieCursor.getColumnIndex(MovieDataContract.MovieDataEntry.COLUMN_TYPE_LIST));
             //int type = movieValues.getAsInteger(MovieDataContract.MovieDataEntry.COLUMN_TYPE_LIST);
 
             //Checks to see if the movie is both popular & top rated
-            if(type != Utility.BOTH_LIST)
+            if(type != BOTH_LIST)
             {
                 if(mMovie.getMovie_list()!=type)
                 {
-                    movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_TYPE_LIST, Utility.BOTH_LIST);
+                    movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_TYPE_LIST, BOTH_LIST);
 
                 }
             }
@@ -326,14 +316,14 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
             movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_RATING, mMovie.getMovies_rating());
             movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_POSTER, mMovie.getMovies_image_url());
             movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_TYPE_LIST, mMovie.getMovie_list());
-            movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_IS_FAVOURITE, "NO");
+            movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_IS_FAVOURITE, getContext().getString(R.string.no));
             movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_ORIGINAL_LANGUAGE, mMovie.getOriginal_language());
 
             movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_UPDATE_DATE, dateTime);
             movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_POSTER_BLOB, new byte[0]);
 
             Uri destinationUri = null;
-            if(mMovie.getMovie_list() == Utility.POPULAR_LIST)
+            if(mMovie.getMovie_list() == POPULAR_LIST)
             {
                 destinationUri = MovieDataContract.MovieDataEntry.CONTENT_POPULAR_URI;
             }
@@ -344,8 +334,6 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
             Uri insertUri=getContext().getContentResolver().insert(MovieDataContract.MovieDataEntry.CONTENT_URI,
                     movieValues);
 
-            //TODO
-            Log.d("insertUri",insertUri.toString());
             return true;
         }
     }
