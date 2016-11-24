@@ -3,7 +3,6 @@ package com.chitrahaar.darshan.syncmovies;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
 
 /**
  * Created by obelix on 21/11/2016.
@@ -15,7 +14,6 @@ public class MovieSyncService extends Service {
 
     @Override
     public void onCreate() {
-        Log.d("SunshineSyncService", "onCreate - SunshineSyncService");
         synchronized (sSyncAdapterLock) {
             if (sMovieSyncAdapter == null) {
                 sMovieSyncAdapter = new MovieSyncAdapter(getApplicationContext(), true);

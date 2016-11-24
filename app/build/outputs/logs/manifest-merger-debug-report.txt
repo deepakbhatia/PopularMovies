@@ -52,8 +52,6 @@ MERGED from [com.android.support:cardview-v7:24.2.1] /Users/obelix/Documents/uda
 		ADDED from /Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/AndroidManifest.xml:12:9-35
 	android:icon
 		ADDED from /Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/AndroidManifest.xml:13:9-43
-	android:theme
-		ADDED from /Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/AndroidManifest.xml:17:9-40
 activity#com.chitrahaar.darshan.MainActivity
 ADDED from /Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/AndroidManifest.xml:18:9-28:20
 	android:label
@@ -93,13 +91,13 @@ ADDED from /Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/Andro
 	android:name
 		ADDED from /Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/AndroidManifest.xml:36:17-63
 provider#com.chitrahaar.darshan.data.MovieContentProvider
-ADDED from /Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/AndroidManifest.xml:40:9-44:48
+ADDED from /Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/AndroidManifest.xml:40:9-44:49
 	android:authorities
 		ADDED from /Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/AndroidManifest.xml:42:13-57
 	android:enabled
 		ADDED from /Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/AndroidManifest.xml:43:13-35
 	android:exported
-		ADDED from /Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/AndroidManifest.xml:44:13-36
+		ADDED from /Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/AndroidManifest.xml:44:13-37
 	android:name
 		ADDED from /Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/AndroidManifest.xml:41:13-54
 service#com.chitrahaar.darshan.syncmovies.MovieSyncAuthenticatorService

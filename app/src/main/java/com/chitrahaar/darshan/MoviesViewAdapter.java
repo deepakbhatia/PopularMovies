@@ -135,26 +135,6 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    private void setTrailerView(TrailerViewHolder trailerViewHolder, int position) {
-        Trailer trailer = (Trailer) moviesList.get(position);
-        if (trailer != null) {
-            if(trailer.getmTrailerName() != null) {
-                trailerViewHolder.getTrailerPlay().setText(trailer.getmTrailerName());
-                trailerViewHolder.getTrailerPlay().setTag(trailer.getmTrailerKey());
-            }
-            else{
-                //TODO
-                Log.d("trailerViewHolder","NO TRAILER");
-                trailerViewHolder.getNo_trailer_view().setVisibility(View.VISIBLE);
-                trailerViewHolder.getTrailerPlay().setVisibility(View.GONE);
-            }
-        }
-    }
-
-
-
-
-
 
     /*
 
@@ -260,34 +240,61 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             TRAILER VIEW HOLDER
      */
+
+
+        private void setTrailerView(TrailerViewHolder trailerViewHolder, int position) {
+            Trailer trailer = (Trailer) moviesList.get(position);
+            if (trailer != null) {
+                if (trailer.getmTrailerName() != null) {
+                    trailerViewHolder.getTrailerPlay().setText(trailer.getmTrailerName());
+                    trailerViewHolder.getTrailerPlay().setTag(trailer.getmTrailerKey());
+                    trailerViewHolder.shareTrailerView.setTag(trailer.getmTrailerKey());
+                } else {
+                    //TODO
+                    Log.d("trailerViewHolder", "NO TRAILER");
+                    trailerViewHolder.getNo_trailer_view().setVisibility(View.VISIBLE);
+                    trailerViewHolder.getTrailerPlay().setVisibility(View.GONE);
+                    trailerViewHolder.shareTrailerView.setVisibility(View.GONE);
+                }
+            }
+        }
     //view holder for trailers
     public class TrailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private Button trailer_play;
         private TextView no_trailer_view;
+        public ImageView shareTrailerView;
 
         public TrailerViewHolder(View v) {
             super(v);
             trailer_play = (Button) v.findViewById(R.id.play_trailer);
             no_trailer_view = (TextView)v.findViewById(R.id.no_trailer_message);
+            shareTrailerView = (ImageView) v.findViewById(R.id.shareTrailer);
             trailer_play.setOnClickListener(this);
+            shareTrailerView.setOnClickListener(this);
         }
 
         public Button getTrailerPlay() {
             return trailer_play;
         }
 
-        public void setTrailerPlay(Button trailer_play) {
-            this.trailer_play = trailer_play;
-        }
-
         @Override
         public void onClick(View view) {
 
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse( String .format(mContext.getString(R.string.youtube_watch_uri),view.getTag())));
-            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+            int viewId = view.getId();
+            if(viewId == R.id.play_trailer){
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse( String .format(mContext.getString(R.string.youtube_watch_uri),view.getTag())));
+                //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
 
-            mContext.startActivity(intent);
+                mContext.startActivity(intent);
+            } else if(viewId == R.id.shareTrailer){
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, Uri.parse( String .format(mContext.getString(R.string.youtube_watch_uri),view.getTag())).toString());
+                sendIntent.setType("text/plain");
+                mContext.startActivity(Intent.createChooser(sendIntent, mContext.getResources().getText(R.string.send_to)));
+            }
+
 
         }
 
@@ -295,9 +302,6 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return no_trailer_view;
         }
 
-        public void setNo_trailer_view(TextView no_trailer_view) {
-            this.no_trailer_view = no_trailer_view;
-        }
     }
 
     /*
@@ -431,12 +435,12 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 if(movie.getFavourite().equalsIgnoreCase("YES"))
                 {
                     ((Button)view).setContentDescription(String.format(mContext.getString(R.string.add_movie_to_favourite_content_description),movie.getMovies_title()));
-
                     movieValues = new ContentValues();
                     movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_IS_FAVOURITE, "NO");
                     movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_POSTER_BLOB, new byte[0]);
                     ((Button)view).setText(mContext.getString(R.string.add_to_favourite));
                     updateData(movieValues,movie);
+
 
                 }else {
                     ((Button)view).setText(mContext.getString(R.string.remove_from_favourites));
@@ -459,6 +463,7 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                 int updateRecord = updateData(movieValues,movie);
                                 //check that update succeeded
                                 if (updateRecord != 0) {
+
 
                                 } else {
                                     Log.e(LOG_TAG, "Failed to update the record with favourite movies");

@@ -16,23 +16,23 @@
         android:gravity="center"
 
         />
-    <ProgressBar android:id="@+id/arProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"></ProgressBar>
-
     <TextView
         android:id="@+id/movie_grid_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        android:drawablePadding="@dimen/element_margin"
         android:padding="@dimen/activity_horizontal_margin"
-        android:drawableBottom="@mipmap/ic_wifi"
         android:visibility="gone"
         android:text="@string/not_connected_snackbar_message"
         />
+
+    <ProgressBar android:id="@+id/arProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+
+        android:layout_centerVertical="true"></ProgressBar>
 
 </RelativeLayout>

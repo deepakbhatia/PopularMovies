@@ -5,6 +5,10 @@
         <item>Top Rated</item>
         <item>Favourite</item>
     </string-array>
+    <string-array name="syncSort">
+        <item>popular</item>
+        <item>top_rated</item>
+    </string-array>
     <attr format="reference" name="drawerArrowStyle"/>
     <attr format="dimension" name="height"/>
     <attr format="boolean" name="isLightTheme"/>
@@ -37,6 +41,7 @@
     <color name="cardview_shadow_end_color">#03000000</color>
     <color name="cardview_shadow_start_color">#37000000</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorAccentPressed">#F8BBD0</color>
     <color name="colorItemPressed">#82B1FF</color>
     <color name="colorItemSelected">#2196F3</color>
     <color name="colorPrimary">#3F51B5</color>
@@ -587,6 +592,7 @@
     <string name="cannot_find_trailer">Sorry cannot find trailer from themoviedb.org</string>
     <string name="character_counter_pattern" translatable="false">%1$d / %2$d</string>
     <string name="content_authority">com.chitrahaar.darshan</string>
+    <string name="currentPreferences">currentPreferences</string>
     <string name="current_grid_item" translatable="false">current_grid_item</string>
     <string name="current_movie_selection">Movies</string>
     <string name="current_movie_selection_reviews">current_movie_selection_reviews</string>
@@ -629,6 +635,7 @@
     <string name="no_reviews_found">No reviews available</string>
     <string name="no_trailer_videos_found">No Trailer Videos found</string>
     <string name="not_connected_snackbar_message">No internet connection. Please connect and refresh from the menu</string>
+    <string name="periodicSortPref">periodicSortPref</string>
     <string name="play_movie_trailer">Play Movie Trailer</string>
     <string name="play_movie_trailer_content_description">Play Trailer for %1$s</string>
     <string name="popular_tag" translatable="false">popular</string>
@@ -640,8 +647,12 @@
     <string name="review_section_label">Reviews</string>
     <string name="review_text_content_description">Review for movie %1$s is %2$s</string>
     <string name="search_menu_title">Search</string>
+    <string name="send_to">Share Trailer to</string>
     <string name="showing_connect_message" translatable="false">showing_connect_message</string>
+    <string name="sortPref">sortPref</string>
+    <string name="sortPreferences">sortPreferences</string>
     <string name="sort_menu_content_description">Tap to see popular or top-rated movies. By default, it shows popular movies.</string>
+    <string name="sort_preference">sort_pref</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="sync_account_type">darshan.chitrahaar.com</string>
     <string name="title_activity_movies_detail">Movie Information</string>

@@ -1,5 +1,7 @@
 package com.chitrahaar.darshan;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,7 +35,7 @@ import java.util.ArrayList;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment implements GettheMoviesTask.ReturnMovies,
+public class MainActivityFragment extends Fragment implements
 
         AdapterView.OnItemClickListener,
 
@@ -47,7 +49,7 @@ public class MainActivityFragment extends Fragment implements GettheMoviesTask.R
 
     private MoviesAdapter moviesAdapter;
 
-    private MovieGridAdapter movieGridAdapter;
+    public static MovieGridAdapter movieGridAdapter;
 
     private View empty_view;//View to Load when there is no internet connection
 
@@ -59,11 +61,15 @@ public class MainActivityFragment extends Fragment implements GettheMoviesTask.R
 
     private int spinnerSelection = 0;
 
+    private boolean mTwoPane;
+
     private  RelativeLayout relativeLayout;
 
     private View root_view;
 
     public static ProgressBar progressBar;
+
+    private Context res;
 
     private ArrayList<Movies> returnedList;
 
@@ -100,13 +106,13 @@ public class MainActivityFragment extends Fragment implements GettheMoviesTask.R
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String listQuery = Utility.getSort_type();
+        String listQuery = Utility.sort_type;
 
         String destinatioUri = null;
-        if(listQuery.equals(getActivity().getString(R.string.popular_tag))) {
+        if(listQuery.equals(res.getString(R.string.popular_tag))) {
             destinatioUri = "popular";
         }
-        else  if(listQuery.equals(getActivity().getString(R.string.top_rated_tag))){
+        else  if(listQuery.equals(res.getString(R.string.top_rated_tag))){
             destinatioUri = "top_rated";
 
         }else{
@@ -137,11 +143,44 @@ public class MainActivityFragment extends Fragment implements GettheMoviesTask.R
         Log.d("movieGridAdapter",loader.toString());
         movieGridAdapter.swapCursor(data);
 
+        if(mTwoPane){
+            movies_gridview.post(new Runnable() {
+                @Override
+                public void run() {
+                    Cursor cursor = (Cursor) movieGridAdapter.getItem(0);
+                    if (cursor != null) {
+                        ((Callback) res)
+                                .onItemSelected(MovieDataContract.MovieDataEntry.createMovieDataPath(
+                                        cursor.getString(COL_MOVIE_ID)
+                                ));
+
+                        movies_gridview.setSelection(0);
+                        movies_gridview.setItemChecked(0,true);
+
+                    }
+
+
+                }
+            });
+        }
+
+        if(data.isAfterLast())
+        {
+            empty_view.setVisibility(View.VISIBLE);
+
+            movies_gridview.setEmptyView(empty_view);
+        }
+        else{
+            empty_view.setVisibility(View.GONE);
+        }
         progressBar.setVisibility(View.GONE);
+        //progressBar.setVisibility(View.GONE);
+
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+
         movieGridAdapter.swapCursor(null);
 
     }
@@ -153,31 +192,21 @@ public class MainActivityFragment extends Fragment implements GettheMoviesTask.R
         public void onItemSelected(Uri dateUri);
     }
 
-    public interface MoviesListCallback{
-        public void gotMoviesList(ArrayList<Movies> moviesList);
-
-    }
-
     public MainActivityFragment() {
     }
 
-
-    public interface MovieSelectionCallback{
-
-        public void onMovieItemSelected(Movies movie);
-    }
 
     @CallSuper
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        movieGridAdapter = new MovieGridAdapter(getActivity(), null,0);
+        res = getActivity();
+        movieGridAdapter = new MovieGridAdapter(res, null,0);
 
         root_view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        relativeLayout = (RelativeLayout)root_view. findViewById(R.id
-                .content_main);
+        //relativeLayout = (RelativeLayout)root_view. findViewById(R.id.content_main);
         movies_gridview = (GridView) root_view.findViewById(R.id.movies_list);
         movies_gridview.setAdapter(movieGridAdapter);
 
@@ -186,65 +215,35 @@ public class MainActivityFragment extends Fragment implements GettheMoviesTask.R
         empty_view = root_view.findViewById(R.id.movie_grid_empty);
 
         progressBar = (ProgressBar) root_view.findViewById(R.id.arProgressBar);
+
+        //progressBar.
         //empty_view.setVisibility(View.GONE);
         //Display when there is no Data Available
-        movies_gridview.setEmptyView(empty_view);
+        //movies_gridview.setEmptyView(empty_view);
 
         movies_gridview.setOnItemClickListener(this);
 
-
-
-        Utility.setSort_type(getActivity().getString(R.string.popular_tag));
+        Utility.sort_type = res.getString(R.string.popular_tag);
 
         setHasOptionsMenu(true);
 
-        SELECTED_GRID_ITEM = getActivity().getString(R.string.current_grid_item);
-        SELECTED_SPINNER_KEY = getActivity().getString(R.string.current_spinner_item);
-
-        //progressBar.setVisibility(View.GONE);
-
-        updateSort();
+        SELECTED_GRID_ITEM = res.getString(R.string.current_grid_item);
+        SELECTED_SPINNER_KEY = res.getString(R.string.current_spinner_item);
 
         return root_view;
     }
 
-    //Interface method to get callback from Task when list of movies is ready
-    @Override
-    public void returnMovies(ArrayList<Movies> moviesList, boolean network_error, boolean parse_error) {
-
-
-        if(moviesList!=null)
-        {
-            returnedList = moviesList;
-            empty_view.setVisibility(View.GONE);
-
-            //TODO previous version
-            /*moviesAdapter = new MoviesAdapter(getActivity(),moviesList);
-            movies_gridview.setAdapter(moviesAdapter);*/
-            //Calls the interface in Mainactivity that checks if its tablet layout, to fill
-            ((MoviesListCallback)getActivity()).gotMoviesList(moviesList);
-
-        }else{
-
-            if(network_error){
-                empty_view.setVisibility(View.VISIBLE);
-                notConnectedMessage();
-            }
-
-        }
-
-    }
 
     private void notConnectedMessage()
     {
-        connectRefresh =  Snackbar.make(relativeLayout,getString(R.string.not_connected_snackbar_message),Snackbar.LENGTH_INDEFINITE);
+        /*connectRefresh =  Snackbar.make(relativeLayout,getString(R.string.not_connected_snackbar_message),Snackbar.LENGTH_INDEFINITE);
 
         connectRefresh.setAction(R.string.Dismiss, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 connectRefresh.dismiss();
             }
-        }).show();
+        }).show();*/
     }
 
     @Override
@@ -252,27 +251,35 @@ public class MainActivityFragment extends Fragment implements GettheMoviesTask.R
 
         Cursor cursor = (Cursor) parent.getItemAtPosition(position);
         if (cursor != null) {
-            ((Callback) getActivity())
+            mPosition = position;
+
+            ((Callback) res)
                     .onItemSelected(MovieDataContract.MovieDataEntry.createMovieDataPath(
                             cursor.getString(COL_MOVIE_ID)
                     ));
         }
+    }
 
+    public void initializeLoder()
+    {
+        getLoaderManager().initLoader(MOVIES_LOADER, null,this);
 
-
-        /*Movies selected_movie = moviesAdapter.getItem(position);
-
-        ((MovieSelectionCallback)getActivity()).onMovieItemSelected(selected_movie);*/
     }
 
     @CallSuper
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 
-        getLoaderManager().initLoader(MOVIES_LOADER, null, this);
+        Thread r = new Thread() {
+            @Override
+            public void run() {
+                initializeLoder();
+            }
+        };
 
-        //TODO previous veriosn
-       /* empty_view.setVisibility(View.VISIBLE);*/
+        r.run();
+
+
         if (savedInstanceState != null){
 
             if(savedInstanceState.containsKey(getString(R.string.showing_connect_message))){
@@ -283,16 +290,6 @@ public class MainActivityFragment extends Fragment implements GettheMoviesTask.R
                 }
             }
 
-            if(savedInstanceState.containsKey(getString(R.string.current_movie_selection))){
-                //TODO Previous Version
-                //returnedList = savedInstanceState.getParcelableArrayList(getString(R.string.current_movie_selection));
-
-                //moviesAdapter = new MoviesAdapter(getActivity(), returnedList);
-                //movies_gridview.setAdapter(moviesAdapter);
-                empty_view.setVisibility(View.GONE);
-
-                //((MoviesListCallback)getActivity()).gotMoviesList(moviesList);
-            }
 
             if (savedInstanceState.containsKey(SELECTED_GRID_ITEM)) {
                 // The listview probably hasn't even been populated yet.  Actually perform the
@@ -304,16 +301,9 @@ public class MainActivityFragment extends Fragment implements GettheMoviesTask.R
             }
             if (savedInstanceState.containsKey(SELECTED_SPINNER_KEY)) {
 
-                keyVal = savedInstanceState.getInt(SELECTED_SPINNER_KEY);
                 spinnerSelection = savedInstanceState.getInt(SELECTED_SPINNER_KEY);
-                updateSort();
 
             }
-        }
-        else
-        {
-                //executeTasks(getActivity().getString(R.string.popular_tag));
-
         }
 
         super.onActivityCreated(savedInstanceState);
@@ -333,66 +323,63 @@ public class MainActivityFragment extends Fragment implements GettheMoviesTask.R
         }
         outState.putInt(SELECTED_SPINNER_KEY ,spinnerSelection);
 
-        outState.putBoolean(getString(R.string.showing_connect_message),!Utility.isNetworkAvailable(getActivity()));
+        outState.putBoolean(getString(R.string.showing_connect_message),!Utility.isNetworkAvailable(res));
 
-        //TODO Previous Version
-       /* if(moviesAdapter!=null)
-        outState.putParcelableArrayList(getString(R.string.current_movie_selection),returnedList);*/
         super.onSaveInstanceState(outState);
     }
 
-    private void updateSort(){
-        if (spinnerSelection == 0) {
-            Utility.setSort_type(getActivity().getString(R.string.popular_tag));
-            //executeTasks(getActivity().getString(R.string.popular_tag));
-        } else if (spinnerSelection == 1){
-            Utility.setSort_type(getActivity().getString(R.string.top_rated_tag));
+    @Override
+    public void onResume() {
 
-            //executeTasks(getActivity().getString(R.string.top_rated_tag));
-        }else if (spinnerSelection == 2){
-            Utility.setSort_type(getActivity().getString(R.string.favourite));
-            ((TextView)empty_view).setText(R.string.no_favourites_message);
-            ((TextView)empty_view).setContentDescription(getString(R.string.no_favourites_message));
-            ((TextView)empty_view).setCompoundDrawablesWithIntrinsicBounds(null,null,null,getActivity().getResources().getDrawable(R.mipmap.ic_no_favourites));
+        super.onResume();
+        SharedPreferences sortPreferences = res.getSharedPreferences(getString(R.string.sortPreferences),Context.MODE_PRIVATE);
 
-            //executeTasks(getActivity().getString(R.string.top_rated_tag));
-        }
-
+        String sortPref = sortPreferences.getString(getString(R.string.currentPreferences),getString(R.string.popular_tag));
+        updateMovieList(sortPref);
     }
+
     private void getMovies(){
 
-        ((TextView)empty_view).setText(R.string.no_connection_message);
-        ((TextView)empty_view).setContentDescription(getString(R.string.no_connection_message));
-        ((TextView)empty_view).setCompoundDrawablesWithIntrinsicBounds(null,null,null,getActivity().getResources().getDrawable(R.mipmap.ic_wifi));
+        //((TextView)empty_view).setText(R.string.no_connection_message);
+        //((TextView)empty_view).setContentDescription(getString(R.string.no_connection_message));
+        //((TextView)empty_view).setCompoundDrawablesWithIntrinsicBounds(null,null,null,getActivity().getResources().getDrawable(R.mipmap.ic_wifi));
 
+        String sortPref = null;
         if (spinnerSelection == 0) {
-            Utility.setSort_type(getActivity().getString(R.string.popular_tag));
+            Utility.sort_type = (res.getString(R.string.popular_tag));
+            sortPref =res.getString(R.string.popular_tag);
             //TODO
             Log.d("getMovies","getMovies"+spinnerSelection);
 
             //executeTasks(getActivity().getString(R.string.popular_tag));
         } else if (spinnerSelection == 1){
-            Utility.setSort_type(getActivity().getString(R.string.top_rated_tag));
-
-            //TODO
-            Log.d("getMovies","getMovies"+spinnerSelection);
-
-
-            //executeTasks(getActivity().getString(R.string.top_rated_tag));
-
+            Utility.sort_type = res.getString(R.string.top_rated_tag);
+            sortPref = res.getString(R.string.top_rated_tag);
 
         }else if (spinnerSelection == 2){
-            Utility.setSort_type(getActivity().getString(R.string.favourite));
+            sortPref = res.getString(R.string.favourite);
+
+            Utility.sort_type = (res.getString(R.string.favourite));
             ((TextView)empty_view).setText(R.string.no_favourites_message);
             ((TextView)empty_view).setContentDescription(getString(R.string.no_favourites_message));
-            ((TextView)empty_view).setCompoundDrawablesWithIntrinsicBounds(null,null,null,getActivity().getResources().getDrawable(R.mipmap.ic_no_favourites));
+            ((TextView)empty_view).setCompoundDrawablesWithIntrinsicBounds(null,null,null,res.getResources().getDrawable(R.mipmap.ic_no_favourites));
 
-            //executeTasks(getActivity().getString(R.string.top_rated_tag));
         }
 
+        SharedPreferences sortPreferences = res.getSharedPreferences(getString(R.string.sortPreferences),Context.MODE_PRIVATE);
+        SharedPreferences.Editor sortPrefEditor = sortPreferences.edit();
+        sortPrefEditor.putString(getString(R.string.currentPreferences),sortPref);
+        sortPrefEditor.apply();
+        updateMovieList(sortPref);
+
+
+    }
+
+    private void updateMovieList(String sortPref)
+    {
         getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
 
-        MovieSyncAdapter.syncImmediately(getActivity());
+        MovieSyncAdapter.syncImmediately(getActivity(),sortPref);
 
     }
 
@@ -407,7 +394,7 @@ public class MainActivityFragment extends Fragment implements GettheMoviesTask.R
 
         sort_spinner.setPopupBackgroundResource(R.color.colorPrimary);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(res,
                 R.array.sort_elements, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -422,18 +409,9 @@ public class MainActivityFragment extends Fragment implements GettheMoviesTask.R
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                //Check if spinner item triggered by selection or by Rotation or Pause & Resume.
-                //keyVal = -1, for selection events or set to index of previous selection when
-                //rotation takes place or activity is resumed.
-                if(keyVal == -1) {
+                spinnerSelection = position; //Set position of the selected spinner item.
+                getMovies();
 
-                    spinnerSelection = position; //Set position of the selected spinner item.
-                    getMovies();
-
-                }
-                else {
-                    keyVal = -1;
-                }
             }
 
             @Override
@@ -455,32 +433,8 @@ public class MainActivityFragment extends Fragment implements GettheMoviesTask.R
 
     }
 
-    private void executeTasks(String sort)
-    {
-            if(Utility.isNetworkAvailable(getActivity()))
-            {
-                progressBar.setVisibility(View.VISIBLE);
-
-                GettheMoviesTask gettheMoviesTask = new GettheMoviesTask(getActivity(),this);
-
-                gettheMoviesTask.execute(sort);
-                //Dismiss snackbar message shown on no internet connection, if its visible.
-                if(connectRefresh!=null && connectRefresh.isShown())
-                {
-                    connectRefresh.dismiss();
-                }
-            }
-            else {
-                if(!(returnedList!=null && returnedList.size()>0))
-                {
-                    empty_view.setVisibility(View.VISIBLE);
-                }
-                notConnectedMessage();
-            }
-
-
-
-
+    public void setmTwoPane(boolean twopane){
+        mTwoPane = twopane;
     }
 
 }

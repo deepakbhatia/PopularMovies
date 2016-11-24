@@ -81,7 +81,9 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:drawableLeft="@mipmap/ic_action_grade"
+                                android:drawableLeft="@mipmap/ic_toggle_star"
+                                android:textAllCaps="false"
+
                                 style="@style/Widget.AppCompat.Button.Colored"
                                 />
 

@@ -10,10 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
+import com.chitrahaar.darshan.syncmovies.MovieSyncAdapter;
 
-public class MainActivity extends AppCompatActivity implements MainActivityFragment.MoviesListCallback,
-        MainActivityFragment.MovieSelectionCallback,
+public class MainActivity extends AppCompatActivity implements
         MainActivityFragment.Callback
          {
 
@@ -57,6 +56,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
                 .replace(R.id.fragment_movies,mainActivityFragment,getString(R.string.movies_list_fragment_tag))
                 .commit();
 
+        mainActivityFragment.setmTwoPane(mTwoPane);
+
+        MovieSyncAdapter.initializeSyncAdapter(this);
+
 
     }
 
@@ -79,29 +82,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 
 
 
-    @Override
-    public void onMovieItemSelected(@NonNull Movies selected_movie) {
 
-        if (mTwoPane) {
-            // In two-pane mode, show the detail view in this activity by
-            // adding or replacing the detail fragment using a
-            // fragment transaction.
-            //getMovieTrailerReviews(selected_movie);
-
-            //twoPaneDetailView(selected_movie);
-
-
-
-        }else {
-            //Phone Layout, Open the Detail View Activity
-            Intent intent = new Intent(this,MoviesDetailActivity.class);
-
-            intent.putExtra(getResources().getString(R.string.movies_detail_view),selected_movie);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
-
-    }
 
 
     private void twoPaneDetailView(@NonNull Uri selectedMovieUri)
@@ -117,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
                 .commit();
     }
 
-    @Override
+   /* @Override
     public void gotMoviesList(ArrayList<Movies> moviesList) {
         //
         if (mTwoPane) {
@@ -126,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
             //twoPaneDetailView(selected_movie);
 
         }
-    }
+    }*/
 
              @Override
              public void onItemSelected(Uri selectedMovieUri) {

@@ -61,28 +61,9 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         return super.getContext();
     }
 
-    @Override
-    public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
-        //TODO
-        Log.d(LOG_TAG, "Starting sync");
-
-        dayTime = new Time();
-        dayTime.setToNow();
-
-        // we start at the day returned by local time. Otherwise this is a mess.
-        julianStartDay = Time.getJulianDay(System.currentTimeMillis(), dayTime.gmtoff);
-
-        // now we work exclusively in UTC
-        dayTime = new Time();
-
-        update_time = System.currentTimeMillis();
-
-        //list query determines whether to retrieve best rated, favourite or popular movies
-        String sort_type = Utility.getSort_type();
-
-        if(sort_type.equals("Favourite"))
-            return;
-        String url_string = this.getContext().getString(R.string.movie_db_base_url)+sort_type;
+    private void syncAction(String sortPref)
+    {
+        String url_string = this.getContext().getString(R.string.movie_db_base_url)+sortPref;
 
         ArrayList<Movies> moviesList = null;
 
@@ -133,7 +114,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
             }
             moviesJSON = buffer.toString();
 
-            getMoviesDataFromJson(moviesJSON, sort_type);
+            getMoviesDataFromJson(moviesJSON, sortPref);
 
         }
         catch (UnknownHostException ex)
@@ -152,6 +133,47 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+    @Override
+    public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
+
+
+        dayTime = new Time();
+        dayTime.setToNow();
+
+        // we start at the day returned by local time. Otherwise this is a mess.
+        julianStartDay = Time.getJulianDay(System.currentTimeMillis(), dayTime.gmtoff);
+
+        // now we work exclusively in UTC
+        dayTime = new Time();
+
+        update_time = System.currentTimeMillis();
+
+        //list query determines whether to retrieve best rated, favourite or popular movies
+
+        String syncNow = bundle.getString(getContext().getString(R.string.sortPref));
+
+        if(syncNow == null)
+        {
+            String[] sortBy = getContext().getResources().getStringArray(R.array.syncSort);
+
+            for(int i =0;i < sortBy.length; i++)
+            {
+                //TODO
+                Log.d(LOG_TAG, "Starting sync:syncNow == null");
+                syncAction(sortBy[i]);
+            }
+        }
+        else{
+            if(syncNow.equals(getContext().getString(R.string.favourite)))
+                return;
+            //TODO
+            Log.d(LOG_TAG, "Starting sync:syncNow != null");
+            syncAction(syncNow);
+        }
+
+
+
 
     }
 
@@ -233,7 +255,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         String movieID=""+ mMovie.getMovie_id();
 
         //TODO
-        Log.d("insertUri",movieID);
+        //Log.d("insertUri",movieID);
 
         // First, check if the movie  exists in the db
         Cursor movieCursor = getContext().getContentResolver().query(
@@ -289,8 +311,10 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
                 return true;
             }else{
                 Log.e(LOG_TAG, "Failed to update the record");
+                movieCursor.close();
                 return false;
             }
+
 
         }else {
             // add the values in the database
@@ -320,6 +344,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
             Uri insertUri=getContext().getContentResolver().insert(MovieDataContract.MovieDataEntry.CONTENT_URI,
                     movieValues);
 
+            //TODO
             Log.d("insertUri",insertUri.toString());
             return true;
         }
@@ -360,24 +385,27 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
     public static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
         Account account = getSyncAccount(context);
         String authority = context.getString(R.string.content_authority);
+        Bundle bundle = new Bundle();
+        bundle.putString(context.getString(R.string.sortPref),null);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // we can enable inexact timers in our periodic sync
             SyncRequest request = new SyncRequest.Builder().
                     syncPeriodic(syncInterval, flexTime).
                     setSyncAdapter(account, authority).
-                    setExtras(new Bundle()).build();
+                    setExtras(bundle).build();
             ContentResolver.requestSync(request);
         } else {
             ContentResolver.addPeriodicSync(account,
-                    authority, new Bundle(), syncInterval);
+                    authority, bundle, syncInterval);
         }
     }
 
     /* Sync data */
-    public static void syncImmediately(Context context) {
+    public static void syncImmediately(Context context,String sortPref) {
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        bundle.putString(context.getString(R.string.sortPref),sortPref);
         ContentResolver.requestSync(getSyncAccount(context),
                 context.getString(R.string.content_authority), bundle);
     }
@@ -386,7 +414,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         /*
          * Since we've created an account
          */
-        MovieSyncAdapter.configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
+        //MovieSyncAdapter.configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
 
         /*
          * Without calling setSyncAutomatically, our periodic sync will not be enabled.
@@ -396,7 +424,9 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         /*
          * Finally, let's do a sync to get things started
          */
-        syncImmediately(context);
+        syncImmediately(context,context.getResources().getString(R.string.popular_tag));
+        syncImmediately(context,context.getResources().getString(R.string.top_rated_tag));
+
     }
 
     public static void initializeSyncAdapter(Context context) {

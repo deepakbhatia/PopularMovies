@@ -57,6 +57,10 @@
         <item>Top Rated</item>
         <item>Favourite</item>
     </string-array>
+    <string-array name="syncSort">
+        <item>popular</item>
+        <item>top_rated</item>
+    </string-array>
     <string name="play_movie_trailer">Play Movie Trailer</string>
     <string name="play_movie_trailer_content_description">Play Trailer for %1$s</string>
     <string name="cannot_find_trailer">Sorry cannot find trailer from themoviedb.org</string>
@@ -78,7 +82,12 @@
     <string name="no_favourites_message">You have not favourites any movies</string>
     <string name="review_author_content_description">Review for movie %1$s by %2$s</string>
     <string name="review_text_content_description">Review for movie %1$s is %2$s</string>
-
+    <string name="sort_preference">sort_pref</string>
+    <string name="sortPref">sortPref</string>
+    <string name="periodicSortPref">periodicSortPref</string>
+    <string name="sortPreferences">sortPreferences</string>
+    <string name="currentPreferences">currentPreferences</string>
+    <string name="send_to">Share Trailer to</string>
 
 
 </resources>
