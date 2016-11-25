@@ -628,6 +628,7 @@
     <string name="movies_detail_view">Detail Movies</string>
     <string name="movies_list_fragment_tag">Movies</string>
     <string name="movies_objects">movies_objects</string>
+    <string name="no">NO</string>
     <string name="no_connection_message">Cannot Update Movies List, as cannot detect network connection</string>
     <string name="no_favourite_created">You have no favourites</string>
     <string name="no_favourites_message">You have not favourites any movies</string>
@@ -661,6 +662,7 @@
     <string name="top_rated_tag" translatable="false">top_rated</string>
     <string name="top_rated_toggle">Top Rated</string>
     <string name="trailers_section_label">Trailers</string>
+    <string name="yes">YES</string>
     <string name="youtube_watch_uri" translatable="false">https://www.youtube.com/watch?v=%1$s</string>
     <style name="AlertDialog.AppCompat" parent="Base.AlertDialog.AppCompat"/>
     <style name="AlertDialog.AppCompat.Light" parent="Base.AlertDialog.AppCompat.Light"/>

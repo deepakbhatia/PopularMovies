@@ -12,6 +12,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -91,6 +92,9 @@ public class MainActivityFragment extends Fragment implements
     public static final int COLUMN_POSTER = 5;
 
 
+    public interface EmptyInterface{
+        public void setEmptyInterface();
+    }
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String listQuery = Utility.sort_type;
@@ -120,27 +124,38 @@ public class MainActivityFragment extends Fragment implements
     }
 
     private void selectGridItem(int position){
-        Cursor cursor = (Cursor) movieGridAdapter.getItem(position);
-        if (cursor != null) {
+
+        if(position == -1) {
             ((Callback) res)
-                    .onItemSelected(MovieDataContract.MovieDataEntry.createMovieDataPath(
-                            cursor.getString(COLUMN_MOVIE_ID)
-                    ));
+                    .onItemSelected(null);
+        }else{
+            Cursor cursor = (Cursor) movieGridAdapter.getItem(position);
+            if (cursor != null) {
+                ((Callback) res)
+                        .onItemSelected(MovieDataContract.MovieDataEntry.createMovieDataPath(
+                                cursor.getString(COLUMN_MOVIE_ID)
+                        ));
 
-            movies_gridview.setSelection(position);
-            movies_gridview.smoothScrollToPosition(position);
-            movies_gridview.setItemChecked(position,true);
+                movies_gridview.setSelection(position);
+                movies_gridview.smoothScrollToPosition(position);
+                movies_gridview.setItemChecked(position,true);
 
+            }
         }
+
     }
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
+        Log.d("onLoadFinished:maf","onLoaderReset");
+
         int movieCount = data.getCount();
+
+        movieGridAdapter.swapCursor(data);
+
 
         if(movieCount > 0)
         {
-            movieGridAdapter.swapCursor(data);
 
             if(mTwoPane){
                 movies_gridview.post(new Runnable() {
@@ -160,8 +175,21 @@ public class MainActivityFragment extends Fragment implements
         //No Data was received, either due to no internet or no information in database
         if(movieCount <= 0)
         {
+            movies_gridview.post(new Runnable() {
+                @Override
+                public void run() {
+
+                    selectGridItem(-1);
+
+                }
+            });
+            //sort_spinner.setSelection(spinnerSelection);
+
+            //((EmptyInterface)res).setEmptyInterface();
             progressBar.setVisibility(View.GONE);
-            ((TextView)empty_view).setText(res.getString(R.string.no_movie_data_available));
+            if(spinnerSelection !=2)
+                ((TextView)empty_view).setText(res.getString(R.string.no_movie_data_available));
+
             empty_view.setVisibility(View.VISIBLE);
 
             if(!Utility.isNetworkAvailable(getActivity())){
@@ -169,10 +197,15 @@ public class MainActivityFragment extends Fragment implements
                 ((TextView)empty_view).setCompoundDrawablesWithIntrinsicBounds(null,null,null,res.getResources().getDrawable(R.mipmap.ic_wifi));
                 notConnectedMessage();
             }
+/*
 
+            if(spinnerSelection == 2)
+                sort_spinner.setSelection(0);
+*/
 
         }
-        else{
+        else
+        {
             if(empty_view!=null)
             empty_view.setVisibility(View.GONE);
             if(connectRefresh!=null && connectRefresh.isShown())
@@ -184,6 +217,7 @@ public class MainActivityFragment extends Fragment implements
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+        Log.d("onLoaderReset:maf","onLoaderReset");
         movieGridAdapter.swapCursor(null);
 
     }
@@ -276,6 +310,7 @@ public class MainActivityFragment extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 
+        initializeLoader();
 
 
 
@@ -304,7 +339,6 @@ public class MainActivityFragment extends Fragment implements
                 getMovies();
             }
         }
-        initializeLoader();
 
 
         super.onActivityCreated(savedInstanceState);
@@ -332,10 +366,8 @@ public class MainActivityFragment extends Fragment implements
     public void onResume() {
 
         super.onResume();
-        SharedPreferences sortPreferences = res.getSharedPreferences(getString(R.string.sortPreferences),Context.MODE_PRIVATE);
 
-        String sortPref = sortPreferences.getString(getString(R.string.currentPreferences),getString(R.string.popular_tag));
-        updateMovieList(sortPref);
+        updateMovieList();
     }
 
     private void getMovies(){
@@ -367,16 +399,24 @@ public class MainActivityFragment extends Fragment implements
         SharedPreferences.Editor sortPrefEditor = sortPreferences.edit();
         sortPrefEditor.putString(getString(R.string.currentPreferences),sortPref);
         sortPrefEditor.apply();
-        updateMovieList(sortPref);
+        updateMovieList();
 
 
     }
 
-    private void updateMovieList(String sortPref)
+    private void updateMovieList()
     {
         getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
 
+        Log.d("onLoad","updateMovieList");
+        SharedPreferences sortPreferences = res.getSharedPreferences(getString(R.string.sortPreferences),Context.MODE_PRIVATE);
+
+        String sortPref = sortPreferences.getString(getString(R.string.currentPreferences),getString(R.string.popular_tag));
+
         MovieSyncAdapter.syncImmediately(getActivity(),sortPref);
+
+        Log.d("onLoad-2","updateMovieList");
+
 
     }
 
@@ -406,7 +446,6 @@ public class MainActivityFragment extends Fragment implements
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-
                 if(keyVal == -1)
                 {
                     spinnerSelection = position;//Set position of the selected spinner item.
@@ -419,7 +458,8 @@ public class MainActivityFragment extends Fragment implements
 
                     getMovies();
                 }
-                else{
+                else
+                {
                     keyVal = -1;
                 }
 

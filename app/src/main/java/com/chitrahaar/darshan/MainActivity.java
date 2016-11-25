@@ -4,21 +4,34 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.chitrahaar.darshan.syncmovies.MovieSyncAdapter;
 
 public class MainActivity extends AppCompatActivity implements
-        MainActivityFragment.Callback
-         {
+        MainActivityFragment.Callback,
+        MainActivityFragment.EmptyInterface {
 
     private boolean mTwoPane;
     private MovieDetailFragment fragment;
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onPostResume() {
+        Log.d("onPostResume", "onResume");
+
+
+        super.onPostResume();
+    }
 
     @CallSuper
     @Override
@@ -27,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Log.d("onCreate", "onResume");
 
         if (findViewById(R.id.movie_detail_container) != null) {
             // The detail container view will be present only in the large-screen layouts
@@ -49,11 +63,11 @@ public class MainActivity extends AppCompatActivity implements
 
         MainActivityFragment mainActivityFragment = (MainActivityFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.movies_list_fragment_tag));
 
-        if(mainActivityFragment == null)
+        if (mainActivityFragment == null)
             mainActivityFragment = new MainActivityFragment();
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_movies,mainActivityFragment,getString(R.string.movies_list_fragment_tag))
+                .replace(R.id.fragment_movies, mainActivityFragment, getString(R.string.movies_list_fragment_tag))
                 .commit();
 
         mainActivityFragment.setmTwoPane(mTwoPane);
@@ -81,12 +95,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-
-
-
-
-    private void twoPaneDetailView(@NonNull Uri selectedMovieUri)
-    {
+    private void twoPaneDetailView(Uri selectedMovieUri) {
         Bundle args = new Bundle();
         args.putParcelable(getResources().getString(R.string.movies_detail_view), selectedMovieUri);
 
@@ -99,26 +108,30 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
+    @Override
+    public void onItemSelected(Uri selectedMovieUri) {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            //getMovieTrailerReviews(selected_movie);
 
-             @Override
-             public void onItemSelected(Uri selectedMovieUri) {
-                 if (mTwoPane) {
-                     // In two-pane mode, show the detail view in this activity by
-                     // adding or replacing the detail fragment using a
-                     // fragment transaction.
-                     //getMovieTrailerReviews(selected_movie);
-
-                     twoPaneDetailView(selectedMovieUri);
-
+            twoPaneDetailView(selectedMovieUri);
 
 
-                 }else {
-                     //Phone Layout, Open the Detail View Activity
-                     Intent intent = new Intent(this,MoviesDetailActivity.class);
+        } else {
+            //Phone Layout, Open the Detail View Activity
+            Intent intent = new Intent(this, MoviesDetailActivity.class);
 
-                     intent.putExtra(getResources().getString(R.string.movies_detail_view),selectedMovieUri);
-                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                     startActivity(intent);
-                 }
-             }
-         }
+            intent.putExtra(getResources().getString(R.string.movies_detail_view), selectedMovieUri);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void setEmptyInterface() {
+        twoPaneDetailView(null);
+    }
+
+}

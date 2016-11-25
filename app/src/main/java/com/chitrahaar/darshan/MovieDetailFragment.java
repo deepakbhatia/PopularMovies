@@ -60,7 +60,7 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
     static final int COL_POSTER_BLOB = 10;
 
     private static final int MOVIE_DETAIL_LOADER = 1000;
-    private Uri mUri;
+    public static Uri mUri;
 
     private View root_view;
     @Override
@@ -147,7 +147,7 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
             );
         }
         else {
-            //noDetailView(true);
+            noDetailView(true);
 
         }
         return null;
@@ -158,10 +158,9 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
 
         if(data.getCount()<=0)
         {
-            //noDetailView(true);
+            noDetailView(true);
         }
         if (data != null && data.moveToFirst()) {
-            // initiatie a boolean to check if the adapter already contains a movie
             boolean hasMovie = false;
 
             //loop through the adapter and check if we have a movie in case there is one. Set hasMovie to true
@@ -231,10 +230,10 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
     }
     @Override
     public void onFocusChange(View view, boolean b) {
-        /*if(b){
+        if(b){
             noDetailView(true);
         }else{
             noDetailView(false);
-        }*/
+        }
     }
 }
