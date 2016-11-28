@@ -8,9 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 public class MoviesDetailActivity extends AppCompatActivity
 {
 
-    private Uri selectedMovieUri;
-    private MovieDetailFragment fragment ;
-
     @CallSuper
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +15,7 @@ public class MoviesDetailActivity extends AppCompatActivity
         setContentView(R.layout.activity_movies_detail);
 
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
-        selectedMovieUri = getIntent().getParcelableExtra(getResources().getString(R.string.movies_detail_view));
+        Uri selectedMovieUri = getIntent().getParcelableExtra(getResources().getString(R.string.movies_detail_view));
 
         if (savedInstanceState == null)
         {
@@ -31,7 +28,7 @@ public class MoviesDetailActivity extends AppCompatActivity
             Bundle arguments = new Bundle();
             arguments.putParcelable(getResources().getString(R.string.movies_detail_view), selectedMovieUri);
 
-            fragment = new MovieDetailFragment();
+            MovieDetailFragment fragment = new MovieDetailFragment();
             fragment.setArguments(arguments);
 
             getSupportFragmentManager().beginTransaction()

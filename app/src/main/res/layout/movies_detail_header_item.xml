@@ -6,7 +6,6 @@
     <TextView
         android:id="@+id/header_label"
         android:text="@string/trailers_section_label"
-        android:layout_below="@+id/trailer_separator"
         android:textSize="@dimen/movie_title_text_size"
         android:layout_gravity="center"
         android:textStyle="bold"

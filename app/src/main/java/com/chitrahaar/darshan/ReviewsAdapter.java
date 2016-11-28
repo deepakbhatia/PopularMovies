@@ -18,8 +18,6 @@ public class ReviewsAdapter extends ArrayAdapter<Reviews> {
     private Context context;
     private LayoutInflater inflater;
     private String movie_title;
-    private TextView review_author;
-    private TextView review_content;
 
     private ArrayList<Reviews> reviewsList;
 
@@ -52,9 +50,9 @@ public class ReviewsAdapter extends ArrayAdapter<Reviews> {
 
         //Create Image View for the Movie Thumbnail
         convertView.setContentDescription(String.format(context.getString(R.string.movie_poster_in_list),movie_title));
-        review_author = (TextView) convertView.findViewById(R.id.review_author);
+        TextView review_author = (TextView) convertView.findViewById(R.id.review_author);
 
-        review_content = (TextView) convertView.findViewById(R.id.review_content);
+        TextView review_content = (TextView) convertView.findViewById(R.id.review_content);
 
         review_author.setText(reviewsList.get(position).getAuthor());
         review_content.setText(reviewsList.get(position).getReview());

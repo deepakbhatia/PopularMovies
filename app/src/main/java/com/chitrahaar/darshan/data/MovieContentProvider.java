@@ -26,8 +26,8 @@ public class MovieContentProvider extends ContentProvider {
     static final int MOVIES_POPULAR = 103;
     static final int MOVIES_FAVOURITE = 104;
 
-    public static int POPULAR_LIST = 1;
-    public static int TOP_RATED_LIST = 2;
+    public static final int POPULAR_LIST = 1;
+    public static final int TOP_RATED_LIST = 2;
     public static int BOTH_LIST = 3;
 
     private static final SQLiteQueryBuilder sMovieQueryBuilder;
@@ -60,7 +60,6 @@ public class MovieContentProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             //in case of movie we want to load the correct data
             case MOVIE:
-                Log.v(LOG_TAG, "URI = " + uri);
                 retCursor = mDbHelper.getReadableDatabase().query(
                         MovieDataContract.MovieDataEntry.TABLE_NAME,
                         projection,
@@ -72,22 +71,25 @@ public class MovieContentProvider extends ContentProvider {
                 );
                 break;
             case MOVIES_FAVOURITE:
-                Log.v(LOG_TAG, "fURI = " + uri);
                 retCursor = getFavouriteMovies(uri, projection, sortOrder);
                 break;
             case MOVIE_SPECIFIC:
                 retCursor = getSpecificMovie(uri, projection, sortOrder);
                 break;
             case MOVIES_TOPRATED:
-                retCursor = getCategoryMovies(uri, projection, sortOrder, ""+TOP_RATED_LIST);
+
+                    retCursor = getCategoryMovies(uri, projection, sortOrder, ""+TOP_RATED_LIST);
+
                 break;
             case MOVIES_POPULAR:
-                retCursor = getCategoryMovies(uri, projection, sortOrder, ""+POPULAR_LIST);
+               retCursor = getCategoryMovies(uri, projection, sortOrder, ""+POPULAR_LIST);
+
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
         //return the cursor
+        //noinspection ConstantConditions
         retCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return retCursor;
 
@@ -132,6 +134,7 @@ public class MovieContentProvider extends ContentProvider {
 
         }
         //notify that the content has been changed
+        //noinspection ConstantConditions
         getContext().getContentResolver().notifyChange(uri, null);
         return returnUri;
     }
@@ -153,6 +156,7 @@ public class MovieContentProvider extends ContentProvider {
         }
         //in case we have deleted sme rows notify the change
         if (rowsDeleted != 0) {
+            //noinspection ConstantConditions
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return rowsDeleted;
@@ -176,6 +180,7 @@ public class MovieContentProvider extends ContentProvider {
         }
         //in case we have updated some rows notify the change
         if (rowsUpdated != 0) {
+            //noinspection ConstantConditions
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return rowsUpdated;
@@ -233,6 +238,7 @@ public class MovieContentProvider extends ContentProvider {
     //use this method to get a list of either toprated or popular movies
     private Cursor getFavouriteMovies(Uri uri, String[] projection, String sortOrder) {
         String[] selectionArgs;
+        //noinspection ConstantConditions
         selectionArgs = new String[]{getContext().getString(R.string.yes)};
         String selection = sIsFavouriteMovieSelection;
         return sMovieQueryBuilder.query(mDbHelper.getReadableDatabase(),

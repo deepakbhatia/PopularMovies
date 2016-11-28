@@ -20,7 +20,7 @@
         android:resizeableActivity="true"
         android:supportsRtl="true" >
         <activity
-            android:name="com.chitrahaar.darshan.SplashScreen"
+            android:name="com.chitrahaar.darshan.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" >
@@ -29,12 +29,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name="com.chitrahaar.darshan.MainActivity"
-            android:label="@string/app_name"
-            android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
             android:name="com.chitrahaar.darshan.MoviesDetailActivity"

@@ -19,39 +19,29 @@
     <string name="movie_detail_fragment_tag" translatable="false">MOVIE_DETAIL_FRAG</string>
     <string name="current_grid_item" translatable="false">current_grid_item</string>
     <string name="current_spinner_item" translatable="false">current_spinner_item</string>
-    <string name="date_format" translatable="false">yyyy-MM-dd</string>
     <string name="Dismiss" translatable="false">DISMISS</string>
     <string name="showing_connect_message" translatable="false">showing_connect_message</string>
     <string name="youtube_watch_uri" translatable="false">https://www.youtube.com/watch?v=%1$s</string>
     <string name="sync_account_type">darshan.chitrahaar.com</string>
 
-    <string name="action_settings">Settings</string>
     <string name="title_activity_movies_detail">Movie Information</string>
     <string name="movie_poster_content_description">Movie Poster</string>
     <string name="movie_plot_content_description">Movie Plot</string>
     <string name="movie_rating_content_description">Movie Rating</string>
     <string name="toolbar_content_description">Toolbar</string>
-    <string name="floating_button_content_description">Tap to</string>
     <string name="movie_rating_text">Average Vote:%1$s</string>
-    <string name="popular_toggle">Popular</string>
-    <string name="top_rated_toggle">Top Rated</string>
-    <string name="no_connection_message">Cannot Update Movies List, as cannot detect network connection</string>
     <string name="movies_list_fragment_tag">Movies</string>
-    <string name="movie_detail_content_description">Detail information for %1$s</string>
-    <string name="no_internet_movie_detail">No movies data available, there is no internet connection</string>
     <string name="movie_detail_image_content_description">Poster image for %1$s</string>
     <string name="movie_detail_title_content_description">Movie title is %1$s</string>
     <string name="movie_detail_overview_content_description">Plot for movie %1$s is %2$s</string>
     <string name="movies_detail_view">Detail Movies</string>
     <string name = "movie_poster_in_list">Movie poster for %1$s</string>
     <string name="movie_release">"Released on: %1$s"</string>
-    <string name="add_to_favourites_content_description">"Add movie %1$s to favourites"</string>
     <string name="remove_from_favourites_content_description">"Remove movie %1$s to favourites"</string>
 
 
     <string name="sort_menu_content_description">Tap to see popular or top-rated movies. By default, it shows popular movies.</string>
     <string name="not_connected_snackbar_message">No internet connection. Please connect and refresh from the menu</string>
-    <string name="current_movie_selection">Movies</string>
     <string-array name="sort_elements">
         <item>Popular</item>
         <item>Top Rated</item>
@@ -63,34 +53,33 @@
     </string-array>
     <string name="play_movie_trailer">Play Movie Trailer</string>
     <string name="play_movie_trailer_content_description">Play Trailer for %1$s</string>
-    <string name="cannot_find_trailer">Sorry cannot find trailer from themoviedb.org</string>
     <string name="add_movie_to_favourite_content_description">Mark the movie %1$s as a favourite</string>
     <string name="find_reviews">%1$s/reviews</string>
-    <string name="current_movie_selection_reviews">current_movie_selection_reviews</string>
     <string name="trailers_section_label">Trailers</string>
-    <string name="movies_objects">movies_objects</string>
-    <string name="movie_database_pref">movie_database_pref</string>
-    <string name="movie_database_version">movie_database_version</string>
     <string name="content_authority">com.chitrahaar.darshan</string>
     <string name="no_trailer_videos_found">No Trailer Videos found</string>
     <string name="no_reviews_found">No reviews available</string>
     <string name="review_section_label">Reviews</string>
-    <string name="favourite">Favourite</string>
+    <string name="favourite">favourite</string>
     <string name="remove_from_favourites">Remove from favorites</string>
     <string name="add_to_favourite">Add to Favourite</string>
-    <string name="no_favourite_created">You have no favourites</string>
     <string name="no_favourites_message">You have not favourites any movies</string>
     <string name="review_author_content_description">Review for movie %1$s by %2$s</string>
     <string name="review_text_content_description">Review for movie %1$s is %2$s</string>
-    <string name="sort_preference">sort_pref</string>
     <string name="sortPref">sortPref</string>
-    <string name="periodicSortPref">periodicSortPref</string>
     <string name="sortPreferences">sortPreferences</string>
     <string name="currentPreferences">currentPreferences</string>
     <string name="send_to">Share Trailer to</string>
     <string name="no_movie_data_available">No movie data available from themoviedb.org</string>
     <string name="no">NO</string>
     <string name="yes">YES</string>
+    <string name="error_updating_record_favourite_movies">Failed to update the record with favourite movies</string>
+    <string name="failed_to_update_record">Failed to update the record</string>
+    <string name="share_trailer_content_description">Share Trailer %1$s of movie %2$s</string>
+    <string name="share_trailer">Share Trailer</string>
+    <string name="refresh_spinner">Refresh</string>
+    <string name="actionbar_spinner_sort">ActionBar Spinner</string>
+    <string name="no_movie_details">No Movie Details</string>
 
 
 </resources>

@@ -52,19 +52,15 @@ public class MainActivityFragment extends Fragment implements
 
     private int mPosition = GridView.INVALID_POSITION;
 
-    private  Spinner sort_spinner;
-
     private int keyVal = -1;
 
-    private int spinnerSelection = 0;
+    public static int spinnerSelection = 0;
 
     private boolean mTwoPane;
 
     private  RelativeLayout relativeLayout;
 
-    private View root_view;
-
-    public static ProgressBar progressBar;
+    public ProgressBar progressBar;
 
     private Context res;
 
@@ -87,27 +83,38 @@ public class MainActivityFragment extends Fragment implements
 
     };
 
-    static final int COLUMN_MOVIE_ID = 0;
+    public static final int COLUMN_MOVIE_ID = 0;
+
 
     public static final int COLUMN_POSTER = 5;
 
 
+    public static final int COLUMN_IS_FAVOURITE = 8;
+
+    public static final int COLUMN_BLOB = 10;
+
+    private int movieCount = 0;
     public interface EmptyInterface{
-        public void setEmptyInterface();
+        void setEmptyInterface();
     }
+
+    public interface Callback{
+        void onItemSelected(Uri movieUri);
+    }
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String listQuery = Utility.sort_type;
 
-        String destinatioUri = null;
+        String destinatioUri;
         if(listQuery.equals(res.getString(R.string.popular_tag))) {
-            destinatioUri = "popular";
+            destinatioUri = res.getString(R.string.popular_tag);
         }
         else  if(listQuery.equals(res.getString(R.string.top_rated_tag))){
-            destinatioUri = "top_rated";
+            destinatioUri = res.getString(R.string.top_rated_tag);
 
         }else{
-            destinatioUri = "favourite";
+            destinatioUri = res.getString(R.string.favourite);
         }
         Uri baseMovieUri = MovieDataContract.MovieDataEntry.CONTENT_URI;
         Uri showMovieUri = Uri.parse(baseMovieUri.toString())
@@ -126,8 +133,11 @@ public class MainActivityFragment extends Fragment implements
     private void selectGridItem(int position){
 
         if(position == -1) {
-            ((Callback) res)
-                    .onItemSelected(null);
+            if(mTwoPane){
+                ((Callback) res)
+                        .onItemSelected(null);
+            }
+
         }else{
             Cursor cursor = (Cursor) movieGridAdapter.getItem(position);
             if (cursor != null) {
@@ -137,44 +147,79 @@ public class MainActivityFragment extends Fragment implements
                         ));
 
                 movies_gridview.setSelection(position);
-                movies_gridview.smoothScrollToPosition(position);
-                movies_gridview.setItemChecked(position,true);
+
 
             }
         }
 
     }
+
+    private void setTwoPane(){
+        selectGridItem(mPosition);
+        movies_gridview.smoothScrollToPosition(mPosition);
+        movies_gridview.setItemChecked(mPosition,true);
+    }
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        Log.d("onLoadFinished:maf","onLoaderReset");
 
-        int movieCount = data.getCount();
-
+        movieCount = data.getCount();
         movieGridAdapter.swapCursor(data);
-
 
         if(movieCount > 0)
         {
+            //TODO
+            Log.d("onLoadFinished:if","onLoaderReset:");
+            movies_gridview.setVisibility(View.VISIBLE);
+            if(empty_view!=null)
+            {
+                Log.d("onLoadFinished:if","onLoaderReset:");
 
-            if(mTwoPane){
-                movies_gridview.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if(mPosition == GridView.INVALID_POSITION)
-                            mPosition = 0;
-                        selectGridItem(mPosition);
-
-                    }
-                });
+                empty_view.setVisibility(View.GONE);
             }
+
+            movies_gridview.post(new Runnable() {
+                @Override
+                public void run() {
+
+                    //TODO
+                    Log.d("onLoadFinished:run", "onLoaderReset:" + mPosition);
+
+                    if (mPosition == GridView.INVALID_POSITION)
+                        mPosition = 0;
+
+                    if (mTwoPane) {
+                        setTwoPane();
+                    }
+                }
+            });
+        }
+
+        networkUnAvailabilityUIChanges();
+        dirtyUIHacks();
+    }
+
+    private void dirtyUIHacks(){
+        progressBar.setVisibility(View.GONE);
+
+        if(!Utility.isNetworkAvailable(getContext()) && spinnerSelection!=2){
+            movies_gridview.setVisibility(View.GONE);
+            ((TextView)empty_view).setText(res.getString(R.string.no_movie_data_available));
+            ((TextView)empty_view).setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
 
         }
 
-        //No Data was received, either due to no internet or no information in database
-        if(movieCount <= 0)
-        {
+        //TODO
+        Log.d("dirtyUIHacks",""+movieCount);
+        if(mTwoPane) {
+            if (movieCount <= 0 && spinnerSelection == 2) {
+                //TODO
+                Log.d("dirtyUIHacks", "");
+                empty_view.setVisibility(View.VISIBLE);
+                mPosition = -1;
+            } /*else
+                mPosition = 0;*/
+
             movies_gridview.post(new Runnable() {
                 @Override
                 public void run() {
@@ -183,60 +228,48 @@ public class MainActivityFragment extends Fragment implements
 
                 }
             });
-            //sort_spinner.setSelection(spinnerSelection);
-
-            //((EmptyInterface)res).setEmptyInterface();
-            progressBar.setVisibility(View.GONE);
-            if(spinnerSelection !=2)
-                ((TextView)empty_view).setText(res.getString(R.string.no_movie_data_available));
-
-            empty_view.setVisibility(View.VISIBLE);
-
-            if(!Utility.isNetworkAvailable(getActivity())){
-                ((TextView)empty_view).setText(res.getString(R.string.no_connection_message));
-                ((TextView)empty_view).setCompoundDrawablesWithIntrinsicBounds(null,null,null,res.getResources().getDrawable(R.mipmap.ic_wifi));
-                notConnectedMessage();
-            }
-/*
-
-            if(spinnerSelection == 2)
-                sort_spinner.setSelection(0);
-*/
-
         }
-        else
+
+
+
+    }
+
+    private void networkUnAvailabilityUIChanges()
+    {
+        if(Utility.isNetworkAvailable(getContext()))
         {
-            if(empty_view!=null)
-            empty_view.setVisibility(View.GONE);
             if(connectRefresh!=null && connectRefresh.isShown())
                 connectRefresh.dismiss();
-        }
+        }else{
 
+            if(connectRefresh!=null)
+                connectRefresh.show();
+            else{
+                notConnectedMessage();
+            }
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
-        Log.d("onLoaderReset:maf","onLoaderReset");
         movieGridAdapter.swapCursor(null);
 
     }
 
     @Override
-    public void onFocusChange(View view, boolean b) {
+    public void onFocusChange(View view, boolean inFocus) {
 
         //If the Gridview is in focus, hide the progressbar
-        if(view.getId() == R.id.movies_list){
-            if(b)
+        if (view.getId() == R.id.movies_list) {
+            if (inFocus)
+            {
                 progressBar.setVisibility(View.GONE);
+            }
+
         }
-
     }
 
-    public interface Callback {
-
-        public void onItemSelected(Uri dateUri);
-    }
 
     public MainActivityFragment() {
     }
@@ -248,11 +281,11 @@ public class MainActivityFragment extends Fragment implements
                              Bundle savedInstanceState) {
 
         res = getActivity();
-        movieGridAdapter = new MovieGridAdapter(res, null,0);
+        movieGridAdapter = new MovieGridAdapter(res);
 
-        root_view = inflater.inflate(R.layout.fragment_main, container, false);
+        View root_view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        relativeLayout = (RelativeLayout)root_view. findViewById(R.id.content_main);
+        relativeLayout = (RelativeLayout) root_view. findViewById(R.id.content_main);
         movies_gridview = (GridView) root_view.findViewById(R.id.movies_list);
         movies_gridview.setAdapter(movieGridAdapter);
         movies_gridview.setOnFocusChangeListener(this);
@@ -312,8 +345,6 @@ public class MainActivityFragment extends Fragment implements
 
         initializeLoader();
 
-
-
         if (savedInstanceState != null){
 
             if(savedInstanceState.containsKey(getString(R.string.showing_connect_message))){
@@ -351,6 +382,7 @@ public class MainActivityFragment extends Fragment implements
         // When tablets rotate, the currently selected list item needs to be saved.
         // When no item is selected, mPosition will be set to Listview.INVALID_POSITION,
         // so check for that before storing.
+        //keyVal = -1;
         if (mPosition != GridView.INVALID_POSITION) {
             outState.putInt(SELECTED_GRID_ITEM, mPosition);
 
@@ -386,7 +418,7 @@ public class MainActivityFragment extends Fragment implements
 
             Utility.sort_type = (res.getString(R.string.favourite));
             ((TextView)empty_view).setText(R.string.no_favourites_message);
-            ((TextView)empty_view).setContentDescription(getString(R.string.no_favourites_message));
+            empty_view.setContentDescription(getString(R.string.no_favourites_message));
             ((TextView)empty_view).setCompoundDrawablesWithIntrinsicBounds(null,null,null,res.getResources().getDrawable(R.mipmap.ic_no_favourites));
 
         }
@@ -406,16 +438,22 @@ public class MainActivityFragment extends Fragment implements
 
     private void updateMovieList()
     {
+
         getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
 
-        Log.d("onLoad","updateMovieList");
         SharedPreferences sortPreferences = res.getSharedPreferences(getString(R.string.sortPreferences),Context.MODE_PRIVATE);
 
         String sortPref = sortPreferences.getString(getString(R.string.currentPreferences),getString(R.string.popular_tag));
 
         MovieSyncAdapter.syncImmediately(getActivity(),sortPref);
 
-        Log.d("onLoad-2","updateMovieList");
+       /* if(Utility.isNetworkAvailable(getActivity()) || spinnerSelection == 2)
+        {
+
+        }else {
+            onLoaderReset(null);
+        }
+*/
 
 
     }
@@ -427,7 +465,7 @@ public class MainActivityFragment extends Fragment implements
 
         //Sort Menu
         MenuItem sort_item = menu.findItem(R.id.spinner);
-        sort_spinner = (Spinner) MenuItemCompat.getActionView(sort_item);
+        Spinner sort_spinner = (Spinner) MenuItemCompat.getActionView(sort_item);
 
         sort_spinner.setPopupBackgroundResource(R.color.colorPrimary);
 
@@ -477,6 +515,8 @@ public class MainActivityFragment extends Fragment implements
         refresh_item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                if(connectRefresh!=null && connectRefresh.isShown())
+                    connectRefresh.dismiss();
                 getMovies();
                 return true;
             }

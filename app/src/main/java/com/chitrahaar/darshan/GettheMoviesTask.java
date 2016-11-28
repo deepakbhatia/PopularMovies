@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +36,7 @@ public class GettheMoviesTask extends AsyncTask<String,String,ArrayList<Movies>>
 
     private boolean parse_error = false;
     public interface ReturnMovies{
-        public void returnMovies(ArrayList<Movies> moviesList, boolean network_error, boolean parse_error);
+        void returnMovies(ArrayList<Movies> moviesList, boolean network_error, boolean parse_error);
     }
 
     //Zero Argument Constructor
@@ -85,7 +84,7 @@ public class GettheMoviesTask extends AsyncTask<String,String,ArrayList<Movies>>
 
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             //No inputStream available
             if (inputStream == null) {
                 // Nothing to do.
@@ -97,7 +96,7 @@ public class GettheMoviesTask extends AsyncTask<String,String,ArrayList<Movies>>
             String line;
             while ((line = reader.readLine()) != null) {
 
-                buffer.append(line + "\n");
+                buffer.append(line).append("\n");
             }
 
             if (buffer.length() == 0) {
@@ -129,7 +128,7 @@ public class GettheMoviesTask extends AsyncTask<String,String,ArrayList<Movies>>
     @Override
     protected void onPostExecute(ArrayList<Movies> movies) {
         super.onPostExecute(movies);
-        MainActivityFragment.progressBar.setVisibility(View.GONE);
+       // MainActivityFragment.progressBar.setVisibility(View.GONE);
         returnMovies.returnMovies(movies,network_error,parse_error);
     }
 
@@ -138,7 +137,7 @@ public class GettheMoviesTask extends AsyncTask<String,String,ArrayList<Movies>>
     {
 
         //List of movies for adapter
-        ArrayList<Movies> movies_list = new ArrayList<Movies>();
+        ArrayList<Movies> movies_list = new ArrayList<>();
         try {
             JSONObject moviesJSONObject = new JSONObject(moviesJSON);
 

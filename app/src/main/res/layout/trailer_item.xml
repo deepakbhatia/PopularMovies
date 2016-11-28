@@ -22,7 +22,10 @@
             android:layout_margin="@dimen/element_margin"
             android:layout_height="wrap_content"
             android:background="@drawable/play_trailer_button_state"
+
+            android:drawableStart="@mipmap/ic_av_play_arrow"
             android:drawableLeft="@mipmap/ic_av_play_arrow"
+
             android:text="@string/play_movie_trailer"
             android:contentDescription="@string/play_movie_trailer_content_description"
             android:textAllCaps="false"
@@ -35,11 +38,11 @@
             android:src="@mipmap/ic_social_share"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/play_trailer_button_state"/>
+            android:background="@drawable/play_trailer_button_state"
+            android:contentDescription="@string/share_trailer"/>
     </LinearLayout>
     <View
         style="@style/LineSeparatorStyle"
-        android:layout_below="@+id/movie_detail_layout"
         android:id="@+id/trailer_separator"
         />
 

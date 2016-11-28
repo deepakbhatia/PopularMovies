@@ -19,7 +19,6 @@ import android.util.Log;
 import com.chitrahaar.darshan.BuildConfig;
 import com.chitrahaar.darshan.Movies;
 import com.chitrahaar.darshan.R;
-import com.chitrahaar.darshan.Utility;
 import com.chitrahaar.darshan.data.MovieDataContract;
 
 import org.json.JSONArray;
@@ -41,18 +40,17 @@ import java.util.ArrayList;
 
 public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
-    public final String LOG_TAG = MovieSyncAdapter.class.getSimpleName();
+    private final String LOG_TAG = MovieSyncAdapter.class.getSimpleName();
 
-    public static final int SYNC_INTERVAL = 60 * 180;
+    private static final int SYNC_INTERVAL = 60 * 180;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
 
-    private long update_time;
     private int sortType;
-    Time dayTime;
-    int julianStartDay;
-    public static int POPULAR_LIST = 1;
-    public static int TOP_RATED_LIST = 2;
-    public static int BOTH_LIST = 3;
+    private Time dayTime;
+    private int julianStartDay;
+    private static int POPULAR_LIST = 1;
+    private static int TOP_RATED_LIST = 2;
+    private static int BOTH_LIST = 3;
     public MovieSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
 
@@ -70,9 +68,9 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
         ArrayList<Movies> moviesList = null;
 
-        HttpURLConnection urlConnection = null;
-        BufferedReader reader = null;
-        String moviesJSON = null;
+        HttpURLConnection urlConnection ;
+        BufferedReader reader ;
+        String moviesJSON ;
 
         try{
             Uri.Builder builder = new Uri.Builder();
@@ -96,7 +94,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             //No inputStream available
             if (inputStream == null) {
                 // Nothing to do.
@@ -108,7 +106,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
             String line;
             while ((line = reader.readLine()) != null) {
 
-                buffer.append(line + "\n");
+                buffer.append(line).append("\n");
             }
 
             if (buffer.length() == 0) {
@@ -122,12 +120,8 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         }
         catch (UnknownHostException ex)
         {
-            //network_error = true;
-            if(moviesList == null)
-            {
                 Log.e(LOG_TAG,ex.toString());
 
-            }
         }
         catch (IOException ex)
         {
@@ -150,7 +144,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         // now we work exclusively in UTC
         dayTime = new Time();
 
-        update_time = System.currentTimeMillis();
+        long update_time = System.currentTimeMillis();
 
         //list query determines whether to retrieve best rated, favourite or popular movies
 
@@ -160,9 +154,8 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         {
             String[] sortBy = getContext().getResources().getStringArray(R.array.syncSort);
 
-            for(int i =0;i < sortBy.length; i++)
-            {
-                syncAction(sortBy[i]);
+            for (String aSortBy : sortBy) {
+                syncAction(aSortBy);
             }
         }
         else{
@@ -178,7 +171,6 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private void getMoviesDataFromJson(String moviesJSON, String sort_type) throws JSONException {
         //List of movies for adapter
-        ArrayList<Movies> movies_list = new ArrayList<Movies>();
         try {
             JSONObject moviesJSONObject = new JSONObject(moviesJSON);
 
@@ -247,7 +239,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
     If the movie key doesn't exist we add the movie
     if the the movie does exist we update the volatile data
      */
-    boolean insertMoviedata(Movies mMovie, long dateTime){
+    private boolean insertMoviedata(Movies mMovie, long dateTime){
 
         // get the id of the movie
         String movieID=""+ mMovie.getMovie_id();
@@ -296,11 +288,9 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
             //check that update succeeded
             if (updateRecord != 0){
-                Log.d(LOG_TAG, "update the record");
-
                 return true;
             }else{
-                Log.e(LOG_TAG, "Failed to update the record");
+                Log.e(LOG_TAG, getContext().getString(R.string.failed_to_update_record));
                 movieCursor.close();
                 return false;
             }
@@ -322,7 +312,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
             movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_UPDATE_DATE, dateTime);
             movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_POSTER_BLOB, new byte[0]);
 
-            Uri destinationUri = null;
+            /*Uri destinationUri = null;
             if(mMovie.getMovie_list() == POPULAR_LIST)
             {
                 destinationUri = MovieDataContract.MovieDataEntry.CONTENT_POPULAR_URI;
@@ -330,7 +320,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
             else if(mMovie.getMovie_list() == Utility.TOP_RATED_LIST){
                 destinationUri = MovieDataContract.MovieDataEntry.CONTENT_TOP_RATED_URI;
 
-            }
+            }*/
             Uri insertUri=getContext().getContentResolver().insert(MovieDataContract.MovieDataEntry.CONTENT_URI,
                     movieValues);
 
@@ -339,7 +329,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
 
-    public static Account getSyncAccount(Context context) {
+    private static Account getSyncAccount(Context context) {
         // Get an instance of the Android account manager
         AccountManager accountManager =
                 (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);

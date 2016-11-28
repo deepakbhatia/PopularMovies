@@ -2,6 +2,8 @@ package com.chitrahaar.darshan;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +17,11 @@ import com.squareup.picasso.Picasso;
  */
 
 public class MovieGridAdapter extends CursorAdapter {
-    public MovieGridAdapter(Context context, Cursor c, int flags) {
-        super(context, c, flags);
+    public MovieGridAdapter(Context context) {
+        super(context, null, 0);
     }
+
+
 
     public Object getItem(int position) {
 
@@ -47,9 +51,28 @@ public class MovieGridAdapter extends CursorAdapter {
         PosterHolder posterHolder = (PosterHolder) view.getTag();
         ImageView movie_image_view = posterHolder.posterView;
 
-         Picasso.with(context)
-                .load(context.getString(R.string.movie_db_poster_base_url) + context.getString(R.string.movies_db_poster_format) + cursor.getString(MainActivityFragment.COLUMN_POSTER))
-                .into(movie_image_view);
+        if(!Utility.isNetworkAvailable(context)
+                && cursor.getString(MainActivityFragment.COLUMN_IS_FAVOURITE).equals(context.getString(R.string.yes))
+                && MainActivityFragment.spinnerSelection == 2){
+            byte[] image_byte = cursor.getBlob(MainActivityFragment.COLUMN_BLOB);
+
+            if(image_byte!=null)
+            {
+                Bitmap posterImage = getImage(image_byte);
+                movie_image_view.setImageBitmap(posterImage);
+            }
+        }else{
+            Picasso.with(context)
+                    .load(context.getString(R.string.movie_db_poster_base_url) + context.getString(R.string.movies_db_poster_format) + cursor.getString(MainActivityFragment.COLUMN_POSTER))
+                    .into(movie_image_view);
+        }
+
+
+
+    }
+
+    public static Bitmap getImage(byte[] image_byte) {
+        return BitmapFactory.decodeByteArray(image_byte, 0, image_byte.length);
     }
 
     /**

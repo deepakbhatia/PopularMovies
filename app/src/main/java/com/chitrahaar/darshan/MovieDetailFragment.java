@@ -30,7 +30,6 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
 
     private Resources res;
 
-    private RecyclerView movieDetailView;
     private MoviesViewAdapter movieContentAdapter;
 
     private static final String[] MOVIE_COLUMNS = {
@@ -88,7 +87,7 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
 
         res = getResources();
 
-        movieDetailView = (RecyclerView) root_view.findViewById(R.id.movie_detail_view);
+        RecyclerView movieDetailView = (RecyclerView) root_view.findViewById(R.id.movie_detail_view);
 
 
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity());
@@ -170,7 +169,7 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
                 }
             }
             //if there is already a movie do nothing else add the movie to the adapter
-            if (hasMovie == true) {
+            if (hasMovie) {
 
             } else {
                 String movieId = data.getString(COL_MOVIE_ID);
@@ -185,7 +184,8 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
 
                mMovie.setMovie_id(movieId);
                mMovie.setMovie_list( data.getInt(COL_TYPE_LIST));
-               mMovie.setFavourite(         data.getString(COL_IS_FAVOURITE));
+               mMovie.setFavourite(data.getString(COL_IS_FAVOURITE));
+                mMovie.setPosterBytes(data.getBlob(COL_POSTER_BLOB));
 
                 ArrayList<Object> mMovies = new ArrayList<>();
                 mMovies.add(mMovie);
@@ -230,7 +230,7 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
     }
     @Override
     public void onFocusChange(View view, boolean b) {
-        if(b){
+        if(!b){
             noDetailView(true);
         }else{
             noDetailView(false);

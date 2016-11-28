@@ -7,6 +7,4 @@
     <color name="colorPrimaryText">@android:color/black</color>
     <color name="colorItemPressed">#82B1FF</color>
     <color name="colorItemSelected">#2196F3</color>
-    <color name="colorReviewHeader">#4FC3F7</color>
-    <color name="colorReviewItem">#B3E5FC</color>
 </resources>

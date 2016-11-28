@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -245,6 +246,7 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     trailerViewHolder.getTrailerPlay().setText(trailer.getmTrailerName());
                     trailerViewHolder.getTrailerPlay().setTag(trailer.getmTrailerKey());
                     trailerViewHolder.shareTrailerView.setTag(trailer.getmTrailerKey());
+                    trailerViewHolder.shareTrailerView.setContentDescription(String.format(mContext.getString(R.string.share_trailer_content_description),trailer.getmTrailerName(),movieTitle));
                 } else {
 
                     trailerViewHolder.getNo_trailer_view().setVisibility(View.VISIBLE);
@@ -279,7 +281,6 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             int viewId = view.getId();
             if(viewId == R.id.play_trailer){
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse( String .format(mContext.getString(R.string.youtube_watch_uri),view.getTag())));
-                //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
 
                 mContext.startActivity(intent);
             } else if(viewId == R.id.shareTrailer){
@@ -316,7 +317,7 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             viewHolderMovie.getMovieTitleView().setContentDescription(String.format(mContext.getString(R.string.movie_detail_title_content_description),movies.getMovies_title()));
             viewHolderMovie.setMovieTitleView(viewHolderMovie.getMovieTitleView());
 
-            viewHolderMovie.getMovieReleaseDateView().setText((movies.getRelease_date()));
+            viewHolderMovie.getMovieReleaseDateView().setText(String.format(mContext.getString(R.string.movie_release), movies.getRelease_date()));
             viewHolderMovie.getMovieReleaseDateView().setContentDescription(String.format(mContext.getString(R.string.movie_release), movies.getRelease_date()));
 
             String tmpRating = mContext.getResources().getString(R.string.movie_rating_text);
@@ -326,30 +327,43 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             viewHolderMovie.getMovieDescriptionView().setText(movies.getMovies_overview());
             viewHolderMovie.getMovieDescriptionView().setContentDescription(String.format(mContext.getString(R.string.movie_detail_overview_content_description),movies.getMovies_title(),movies.getMovies_overview()));
 
-            Picasso
-                    .with(mContext)
-                    .load(mContext.getString(R.string.movie_db_poster_base_url)+mContext.getString(R.string.movies_db_poster_format)+movies.getMovies_image_url())
-                    .into(viewHolderMovie.getPosterView());
 
+            if(!Utility.isNetworkAvailable(mContext)
+                    && movies.getFavourite().equals(mContext.getString(R.string.yes))
+                    && MainActivityFragment.spinnerSelection == 2){
+                byte[] image_byte = movies.getPosterBytes();
+
+                if(image_byte!=null)
+                {
+                    Bitmap posterImage = getImage(image_byte);
+                    viewHolderMovie.getPosterView().setImageBitmap(posterImage);
+                }
+            }
+            else {
+                Picasso
+                        .with(mContext)
+                        .load(mContext.getString(R.string.movie_db_poster_base_url) + mContext.getString(R.string.movies_db_poster_format) + movies.getMovies_image_url())
+                        .into(viewHolderMovie.getPosterView());
+            }
             viewHolderMovie.getPosterView().setContentDescription(String.format(mContext.getString(R.string.movie_detail_image_content_description),movies.getMovies_title()));
 
             viewHolderMovie.getFavouriteButton().setTag(movies);
             viewHolderMovie.getFavouriteButton().setContentDescription(String.format(mContext.getString(R.string.add_movie_to_favourite_content_description),movies.getMovies_title()));
 
             //viewHolderMovie.getFavouriteButton().setTag(mContext.getString(R.string.movie_db_poster_base_url)+mContext.getString(R.string.movies_db_poster_format)+movies.getMovies_image_url());
-            Boolean mIsFavourite;
 
-            if (movies.getFavourite().equalsIgnoreCase("YES")) {
-                mIsFavourite = true;
+            if (movies.getFavourite().equalsIgnoreCase(mContext.getString(R.string.yes))) {
                 viewHolderMovie.getFavouriteButton().setText(R.string.remove_from_favourites);
             } else {
-                mIsFavourite = false;
                 viewHolderMovie.getFavouriteButton().setText(mContext.getString(R.string.add_to_favourite));
             }
 
         }
     }
 
+    public static Bitmap getImage(byte[] image_byte) {
+        return BitmapFactory.decodeByteArray(image_byte, 0, image_byte.length);
+    }
 
     public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -430,7 +444,7 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 if(movie.getFavourite().equalsIgnoreCase(mContext.getString(R.string.yes)))
 
                 {
-                    ((Button)view).setContentDescription(String.format(mContext.getString(R.string.add_movie_to_favourite_content_description),movie.getMovies_title()));
+                    view.setContentDescription(String.format(mContext.getString(R.string.add_movie_to_favourite_content_description),movie.getMovies_title()));
                     movieValues = new ContentValues();
                     movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_IS_FAVOURITE, mContext.getString(R.string.no));
                     movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_POSTER_BLOB, new byte[0]);
@@ -440,12 +454,12 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                 }else {
                     ((Button)view).setText(mContext.getString(R.string.remove_from_favourites));
-                    ((Button)view).setContentDescription(String.format(mContext.getString(R.string.remove_from_favourites_content_description),movie.getMovies_title()));
+                    view.setContentDescription(String.format(mContext.getString(R.string.remove_from_favourites_content_description),movie.getMovies_title()));
 
                     Thread r = new Thread() {
                         @Override
                         public void run() {
-                            Bitmap bitmap = null;
+                            Bitmap bitmap ;
                             try {
                                 final RequestCreator image_load = Picasso.with(mContext)
                                         .load(mContext.getString(R.string.movie_db_poster_base_url)+mContext.getString(R.string.movies_db_poster_format)+movie.getMovies_image_url());
@@ -462,7 +476,7 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 
                                 } else {
-                                    Log.e(LOG_TAG, "Failed to update the record with favourite movies");
+                                    Log.e(LOG_TAG, mContext.getString(R.string.error_updating_record_favourite_movies));
 
                                 }
                             } catch (IOException e) {
@@ -481,11 +495,10 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private int updateData(ContentValues movieValues, Movies movie)
     {
         //update
-        int updateRecord = mContext.getContentResolver().update(MovieDataContract.MovieDataEntry.CONTENT_URI,
+
+        return mContext.getContentResolver().update(MovieDataContract.MovieDataEntry.CONTENT_URI,
                 movieValues, MovieDataContract.MovieDataEntry._ID + " = ?",
                 new String[]{movie.getMovie_id()});
-
-        return updateRecord;
 
     }
 
@@ -506,14 +519,11 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     // added the get object method so it is possible to return an object from a certain position
     public Object getObject(int position) {
         if (moviesList.get(position) instanceof Trailer) {
-            Trailer mTrailer = (Trailer) moviesList.get(position);
-            return mTrailer;
+            return moviesList.get(position);
         } else if (moviesList.get(position) instanceof Reviews) {
-            Reviews mReview = (Reviews) moviesList.get(position);
-            return mReview;
+            return moviesList.get(position);
         } else if (moviesList.get(position) instanceof Movies) {
-            Movies mMovie = (Movies) moviesList.get(position);
-            return mMovie;
+            return moviesList.get(position);
         }
         return null;
     }

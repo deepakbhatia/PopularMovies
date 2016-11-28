@@ -4,10 +4,6 @@
         "source": "/Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/res/mipmap-xxxhdpi/ic_toggle_star.png"
     },
     {
-        "merged": "/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/res/merged/debug/mipmap-xxxhdpi/ic_wifi.png",
-        "source": "/Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/res/mipmap-xxxhdpi/ic_wifi.png"
-    },
-    {
         "merged": "/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/res/merged/debug/mipmap-xxxhdpi/ic_no_favourites.png",
         "source": "/Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/res/mipmap-xxxhdpi/ic_no_favourites.png"
     },

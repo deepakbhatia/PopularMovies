@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,7 +16,6 @@ public class MainActivity extends AppCompatActivity implements
         MainActivityFragment.EmptyInterface {
 
     private boolean mTwoPane;
-    private MovieDetailFragment fragment;
 
 
     @Override
@@ -27,9 +25,6 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     protected void onPostResume() {
-        Log.d("onPostResume", "onResume");
-
-
         super.onPostResume();
     }
 
@@ -40,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Log.d("onCreate", "onResume");
 
         if (findViewById(R.id.movie_detail_container) != null) {
             // The detail container view will be present only in the large-screen layouts
@@ -99,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements
         Bundle args = new Bundle();
         args.putParcelable(getResources().getString(R.string.movies_detail_view), selectedMovieUri);
 
-        fragment = new MovieDetailFragment();
+        MovieDetailFragment fragment = new MovieDetailFragment();
         fragment.setArguments(args);
 
         getSupportFragmentManager().beginTransaction()

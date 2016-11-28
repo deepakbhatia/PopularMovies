@@ -51,11 +51,11 @@
                 "from": {
                     "file": "/Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/res/values-w820dp/dimens.xml",
                     "position": {
-                        "startLine": 8,
+                        "startLine": 7,
                         "startColumn": 4,
-                        "startOffset": 402,
+                        "startOffset": 360,
                         "endColumn": 44,
-                        "endOffset": 442
+                        "endOffset": 400
                     }
                 }
             },
@@ -64,17 +64,17 @@
                     "startLine": 5,
                     "startColumn": 4,
                     "startOffset": 214,
-                    "endColumn": 41,
-                    "endOffset": 251
+                    "endColumn": 55,
+                    "endOffset": 265
                 },
                 "from": {
                     "file": "/Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/res/values-w820dp/dimens.xml",
                     "position": {
-                        "startLine": 4,
+                        "startLine": 5,
                         "startColumn": 4,
-                        "startOffset": 202,
-                        "endColumn": 41,
-                        "endOffset": 239
+                        "startOffset": 255,
+                        "endColumn": 55,
+                        "endOffset": 306
                     }
                 }
             },
@@ -82,18 +82,18 @@
                 "to": {
                     "startLine": 6,
                     "startColumn": 4,
-                    "startOffset": 256,
-                    "endColumn": 55,
-                    "endOffset": 307
+                    "startOffset": 270,
+                    "endColumn": 48,
+                    "endOffset": 314
                 },
                 "from": {
                     "file": "/Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/res/values-w820dp/dimens.xml",
                     "position": {
                         "startLine": 6,
                         "startColumn": 4,
-                        "startOffset": 297,
-                        "endColumn": 55,
-                        "endOffset": 348
+                        "startOffset": 311,
+                        "endColumn": 48,
+                        "endOffset": 355
                     }
                 }
             },
@@ -101,37 +101,18 @@
                 "to": {
                     "startLine": 7,
                     "startColumn": 4,
-                    "startOffset": 312,
-                    "endColumn": 48,
-                    "endOffset": 356
-                },
-                "from": {
-                    "file": "/Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/res/values-w820dp/dimens.xml",
-                    "position": {
-                        "startLine": 7,
-                        "startColumn": 4,
-                        "startOffset": 353,
-                        "endColumn": 48,
-                        "endOffset": 397
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 8,
-                    "startColumn": 4,
-                    "startOffset": 361,
+                    "startOffset": 319,
                     "endColumn": 52,
-                    "endOffset": 409
+                    "endOffset": 367
                 },
                 "from": {
                     "file": "/Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/res/values-w820dp/dimens.xml",
                     "position": {
-                        "startLine": 5,
+                        "startLine": 4,
                         "startColumn": 4,
-                        "startOffset": 244,
+                        "startOffset": 202,
                         "endColumn": 52,
-                        "endOffset": 292
+                        "endOffset": 250
                     }
                 }
             }

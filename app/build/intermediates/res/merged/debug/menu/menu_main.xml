@@ -2,13 +2,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/spinner"
-        android:title="ActionBar Spinner"
+        android:title="@string/actionbar_spinner_sort"
         app:actionViewClass="android.support.v7.widget.AppCompatSpinner"
         app:showAsAction="always"
         />
     <item
         android:id="@+id/referesh"
-        android:title="Refresh"
+        android:title="@string/refresh_spinner"
         app:showAsAction="never"/>
 
 </menu>

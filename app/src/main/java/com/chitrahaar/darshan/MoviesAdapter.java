@@ -20,7 +20,6 @@ import java.util.ArrayList;
 public class MoviesAdapter extends ArrayAdapter<Movies> {
     private Context context;
     private LayoutInflater inflater;
-    private ImageView movie_image_view;
 
     private ArrayList<Movies> moviesList;
 
@@ -53,7 +52,7 @@ public class MoviesAdapter extends ArrayAdapter<Movies> {
 
         //Create Image View for the Movie Thumbnail
         convertView.setContentDescription(String.format(context.getString(R.string.movie_poster_in_list),this.moviesList.get(position).getMovies_title()));
-        movie_image_view = (ImageView) convertView.findViewById(R.id.movie_image);
+        ImageView movie_image_view = (ImageView) convertView.findViewById(R.id.movie_image);
 
         final RequestCreator image_load = Picasso.with(context)
                 .load(context.getString(R.string.movie_db_poster_base_url)+context.getString(R.string.movies_db_poster_format)+this.moviesList.get(position).getMovies_image_url());

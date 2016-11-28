@@ -14,7 +14,7 @@
     tools:showIn="@layout/activity_movies_detail">
     <TextView
         android:id="@+id/empty_view_detail"
-        android:text="No Movie Details"
+        android:text="@string/no_movie_details"
         android:gravity="center"
         android:layout_centerInParent="true"
         android:layout_width="match_parent"

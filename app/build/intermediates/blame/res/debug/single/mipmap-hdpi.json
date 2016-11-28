@@ -16,10 +16,6 @@
         "source": "/Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/res/mipmap-hdpi/ic_av_play_arrow.png"
     },
     {
-        "merged": "/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/res/merged/debug/mipmap-hdpi/ic_wifi.png",
-        "source": "/Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/res/mipmap-hdpi/ic_wifi.png"
-    },
-    {
         "merged": "/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/res/merged/debug/mipmap-hdpi/ic_launcher.png",
         "source": "/Users/obelix/Documents/udacity_code/PopularMovies/app/src/main/res/mipmap-hdpi/ic_launcher.png"
     }

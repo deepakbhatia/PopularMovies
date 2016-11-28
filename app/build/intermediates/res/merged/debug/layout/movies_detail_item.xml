@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:id="@+id/target_layout"
+<RelativeLayout android:id="@+id/target_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    >
+    xmlns:tool="http://schemas.android.com/tools">
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -22,13 +21,12 @@
                     android:id="@+id/movie_title_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorItemSelected"
                     android:padding="36dp"
-                    android:orientation="vertical">
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    >
                 <TextView
                     android:id="@+id/movie_title"
-                    android:layout_centerHorizontal="true"
-                    android:layout_alignParentTop="true"
                     android:textSize="@dimen/movie_title_text_size"
                     android:gravity="center"
                     style="@style/MovieDetailStyle"
@@ -63,15 +61,20 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:layout_gravity="center"
 
                             >
                             <TextView
                                 android:id="@+id/movie_release"
                                 android:textSize="@dimen/movie_rating_size"
+                                android:textColor="@color/colorPrimaryText"
                                 android:textStyle="italic"
                                 android:layout_centerHorizontal="true"
+                                android:gravity="center"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
+                                tool:text="Released on 2016-08-09"
+
                                   />
                             <Button
                                 android:id="@+id/movie_favourite"
@@ -79,13 +82,17 @@
                                 android:text="@string/add_to_favourite"
                                 android:contentDescription="@string/add_movie_to_favourite_content_description"
                                 android:layout_centerHorizontal="true"
+                                android:gravity="center"
+                                android:layout_marginTop="@dimen/element_margin"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:drawableLeft="@mipmap/ic_toggle_star"
-                                android:textAllCaps="false"
 
+                                android:drawableStart="@mipmap/ic_toggle_star"
+                                android:drawableLeft="@mipmap/ic_toggle_star"
+
+                                android:textAllCaps="false"
                                 style="@style/Widget.AppCompat.Button.Colored"
-                                />
+                                 />
 
                         </RelativeLayout>
                     </LinearLayout>

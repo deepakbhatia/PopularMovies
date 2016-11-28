@@ -32,10 +32,6 @@ public class TrailersTask extends AsyncTask<String, String, ArrayList<Object>> {
     BufferedReader reader = null;
     String moviesJSON = null;
 
-    private boolean network_error = false;
-
-    private boolean parse_error = false;
-
     private MoviesViewAdapter moviesViewAdapter;
 
     public TrailersTask(Context context, MoviesViewAdapter moviesViewAdapter)
@@ -51,7 +47,7 @@ public class TrailersTask extends AsyncTask<String, String, ArrayList<Object>> {
         String video_id = params[0];
         String url_string = String.format(context.getString(R.string.movie_db_base_url)+context.getString(R.string.find_trailer),video_id);
 
-        ArrayList<Object> trailer_list = null;
+        ArrayList<Object> trailer_list;
 
         try{
             Uri.Builder builder = new Uri.Builder();
@@ -74,7 +70,7 @@ public class TrailersTask extends AsyncTask<String, String, ArrayList<Object>> {
 
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             //No inputStream available
             if (inputStream == null) {
                 // Nothing to do.
@@ -86,7 +82,7 @@ public class TrailersTask extends AsyncTask<String, String, ArrayList<Object>> {
             String line;
             while ((line = reader.readLine()) != null) {
 
-                buffer.append(line + "\n");
+                buffer.append(line).append("\n");
             }
 
             if (buffer.length() == 0) {
@@ -100,14 +96,14 @@ public class TrailersTask extends AsyncTask<String, String, ArrayList<Object>> {
         }
         catch (UnknownHostException ex)
         {
-            network_error = true;
+            boolean network_error = true;
             trailer_list = null;
             Log.e(LOG_TAG,ex.toString());
 
         }
         catch (IOException ex)
         {
-            parse_error = true;
+            boolean parse_error = true;
             trailer_list = null;
             Log.e(LOG_TAG,ex.toString());
         }
@@ -116,9 +112,9 @@ public class TrailersTask extends AsyncTask<String, String, ArrayList<Object>> {
 
     private ArrayList<Object> parse(String trailer){
 
-        String trailer_id = null;
+        String trailer_id ;
 
-        ArrayList<Object> trailer_list = new ArrayList<Object>();
+        ArrayList<Object> trailer_list = new ArrayList<>();
 
         try {
             JSONObject trailersJSONObject = new JSONObject(trailer);
