@@ -459,7 +459,7 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     Thread r = new Thread() {
                         @Override
                         public void run() {
-                            Bitmap bitmap ;
+                            Bitmap bitmap = null;
                             try {
                                 final RequestCreator image_load = Picasso.with(mContext)
                                         .load(mContext.getString(R.string.movie_db_poster_base_url)+mContext.getString(R.string.movies_db_poster_format)+movie.getMovies_image_url());

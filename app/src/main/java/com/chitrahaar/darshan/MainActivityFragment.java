@@ -185,7 +185,7 @@ public class MainActivityFragment extends Fragment implements
                     //TODO
                     Log.d("onLoadFinished:run", "onLoaderReset:" + mPosition);
 
-                    if (mPosition == GridView.INVALID_POSITION)
+                    if (mPosition == GridView.INVALID_POSITION )
                         mPosition = 0;
 
                     if (mTwoPane) {
@@ -199,27 +199,28 @@ public class MainActivityFragment extends Fragment implements
         dirtyUIHacks();
     }
 
-    private void dirtyUIHacks(){
+    private void dirtyUIHacks() {
         progressBar.setVisibility(View.GONE);
 
-        if(!Utility.isNetworkAvailable(getContext()) && spinnerSelection!=2){
+        if (!Utility.isNetworkAvailable(getContext()) && spinnerSelection != 2) {
             movies_gridview.setVisibility(View.GONE);
-            ((TextView)empty_view).setText(res.getString(R.string.no_movie_data_available));
-            ((TextView)empty_view).setCompoundDrawablesWithIntrinsicBounds(null,null,null,null);
+            ((TextView) empty_view).setText(res.getString(R.string.no_movie_data_available));
+            ((TextView) empty_view).setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+
+        }
+
+        if (movieCount <= 0 && spinnerSelection == 2) {
+            //movieGridAdapter.swapCursor(null);
+            //TODO
+            Log.d("dirtyUIHacks", "--" + spinnerSelection);
+            empty_view.setVisibility(View.VISIBLE);
 
         }
 
         //TODO
-        Log.d("dirtyUIHacks",""+movieCount);
-        if(mTwoPane) {
-            if (movieCount <= 0 && spinnerSelection == 2) {
-                //TODO
-                Log.d("dirtyUIHacks", "");
-                empty_view.setVisibility(View.VISIBLE);
-                mPosition = -1;
-            } /*else
-                mPosition = 0;*/
+        if (mTwoPane) {
 
+            mPosition = -1;
             movies_gridview.post(new Runnable() {
                 @Override
                 public void run() {
@@ -230,9 +231,31 @@ public class MainActivityFragment extends Fragment implements
             });
         }
 
+            if(!movies_gridview.isShown()){
+               // movieGridAdapter.swapCursor(null);
 
+                empty_view.setVisibility(View.VISIBLE);
+                mPosition = -1;
+                movies_gridview.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        //TODO
+                        //if(mTwoPane)
+                        selectGridItem(-1);
+
+                    }
+                });
+                //TODO
+                Log.d("dirtyUIHacks",""+movies_gridview.isShown());
+
+            }
 
     }
+
+
+
+
 
     private void networkUnAvailabilityUIChanges()
     {
@@ -383,7 +406,8 @@ public class MainActivityFragment extends Fragment implements
         // When no item is selected, mPosition will be set to Listview.INVALID_POSITION,
         // so check for that before storing.
         //keyVal = -1;
-        if (mPosition != GridView.INVALID_POSITION) {
+        if (mPosition != GridView.INVALID_POSITION)
+        {
             outState.putInt(SELECTED_GRID_ITEM, mPosition);
 
         }
