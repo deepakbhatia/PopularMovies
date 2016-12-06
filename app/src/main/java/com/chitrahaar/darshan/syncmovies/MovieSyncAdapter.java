@@ -32,7 +32,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 
 /**
  * Created by obelix on 21/11/2016.
@@ -48,9 +47,9 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
     private int sortType;
     private Time dayTime;
     private int julianStartDay;
-    private static int POPULAR_LIST = 1;
-    private static int TOP_RATED_LIST = 2;
-    private static int BOTH_LIST = 3;
+    private static final int POPULAR_LIST = 1;
+    private static final int TOP_RATED_LIST = 2;
+    private static final int BOTH_LIST = 3;
     public MovieSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
 
@@ -65,8 +64,6 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
     private void syncAction(String sortPref)
     {
         String url_string = this.getContext().getString(R.string.movie_db_base_url)+sortPref;
-
-        ArrayList<Movies> moviesList = null;
 
         HttpURLConnection urlConnection ;
         BufferedReader reader ;
@@ -127,8 +124,6 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         {
             //parse_error = true;
             Log.e(LOG_TAG,ex.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
     @Override
@@ -143,8 +138,6 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
         // now we work exclusively in UTC
         dayTime = new Time();
-
-        long update_time = System.currentTimeMillis();
 
         //list query determines whether to retrieve best rated, favourite or popular movies
 
@@ -169,7 +162,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
     }
 
-    private void getMoviesDataFromJson(String moviesJSON, String sort_type) throws JSONException {
+    private void getMoviesDataFromJson(String moviesJSON, String sort_type) {
         //List of movies for adapter
         try {
             JSONObject moviesJSONObject = new JSONObject(moviesJSON);
@@ -312,15 +305,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
             movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_UPDATE_DATE, dateTime);
             movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_POSTER_BLOB, new byte[0]);
 
-            /*Uri destinationUri = null;
-            if(mMovie.getMovie_list() == POPULAR_LIST)
-            {
-                destinationUri = MovieDataContract.MovieDataEntry.CONTENT_POPULAR_URI;
-            }
-            else if(mMovie.getMovie_list() == Utility.TOP_RATED_LIST){
-                destinationUri = MovieDataContract.MovieDataEntry.CONTENT_TOP_RATED_URI;
 
-            }*/
             Uri insertUri=getContext().getContentResolver().insert(MovieDataContract.MovieDataEntry.CONTENT_URI,
                     movieValues);
 

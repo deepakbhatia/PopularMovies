@@ -15,32 +15,24 @@ public class MovieDataContract {
     public static final String CONTENT_AUTHORITY = "com.chitrahaar.darshan";
 
     // defining base uri and use the content authority
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     //defining paths for different data
     public static final String PATH_MOVIE = "movies";
-
-    public static final String PATH_POPULAR_MOVIE = "popular";
-
-    public static final String PATH_TOP_RATED_MOVIE = "top_rated";
-
-    public static final String PATH_FAV_MOVIE = "favourite";
 
     // this class will contain the details of the movie table
     public static final class MovieDataEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE).build();
-        public static final Uri CONTENT_POPULAR_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE).appendPath(PATH_POPULAR_MOVIE).build();
 
-        public static final Uri CONTENT_TOP_RATED_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE).appendPath(PATH_TOP_RATED_MOVIE).build();
         //defining values for the mime types
         public static final String CONTENT_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_MOVIE;
-        public static final String CONTENT_ITEM_TYPE =
-                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_MOVIE;
+// --Commented out by Inspection START (06/12/2016, 16:09):
+//        public static final String CONTENT_ITEM_TYPE =
+//                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_MOVIE;
+// --Commented out by Inspection STOP (06/12/2016, 16:09)
 
         //table name
         public static final String TABLE_NAME = "movie";

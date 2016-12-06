@@ -12,7 +12,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,7 +45,7 @@ public class MainActivityFragment extends Fragment implements
     private GridView movies_gridview;
 
 
-    public static MovieGridAdapter movieGridAdapter;
+    private static MovieGridAdapter movieGridAdapter;
 
     private View empty_view;//View to Load when there is no internet connection
 
@@ -60,7 +59,7 @@ public class MainActivityFragment extends Fragment implements
 
     private  RelativeLayout relativeLayout;
 
-    public ProgressBar progressBar;
+    private ProgressBar progressBar;
 
     private Context res;
 
@@ -94,9 +93,6 @@ public class MainActivityFragment extends Fragment implements
     public static final int COLUMN_BLOB = 10;
 
     private int movieCount = 0;
-    public interface EmptyInterface{
-        void setEmptyInterface();
-    }
 
     public interface Callback{
         void onItemSelected(Uri movieUri);
@@ -168,12 +164,9 @@ public class MainActivityFragment extends Fragment implements
 
         if(movieCount > 0)
         {
-            //TODO
-            Log.d("onLoadFinished:if","onLoaderReset:");
             movies_gridview.setVisibility(View.VISIBLE);
             if(empty_view!=null)
             {
-                Log.d("onLoadFinished:if","onLoaderReset:");
 
                 empty_view.setVisibility(View.GONE);
             }
@@ -182,8 +175,6 @@ public class MainActivityFragment extends Fragment implements
                 @Override
                 public void run() {
 
-                    //TODO
-                    Log.d("onLoadFinished:run", "onLoaderReset:" + mPosition);
 
                     if (mPosition == GridView.INVALID_POSITION )
                         mPosition = 0;
@@ -202,23 +193,40 @@ public class MainActivityFragment extends Fragment implements
     private void dirtyUIHacks() {
         progressBar.setVisibility(View.GONE);
 
-        if (!Utility.isNetworkAvailable(getContext()) && spinnerSelection != 2) {
-            movies_gridview.setVisibility(View.GONE);
+        if (!Utility.isNetworkAvailable(getContext())) {
+            //movies_gridview.setVisibility(View.GONE);
             ((TextView) empty_view).setText(res.getString(R.string.no_movie_data_available));
             ((TextView) empty_view).setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
 
         }
 
-        if (movieCount <= 0 && spinnerSelection == 2) {
+        if (movieCount <= 0) {
             //movieGridAdapter.swapCursor(null);
-            //TODO
-            Log.d("dirtyUIHacks", "--" + spinnerSelection);
+            if(spinnerSelection == 2){
+                ((TextView) empty_view).setText(res.getString(R.string.no_favourites_message));
+
+                ((TextView) empty_view).setCompoundDrawablesWithIntrinsicBounds(null, null, null, getActivity().getResources().getDrawable(R.mipmap.ic_no_favourites));
+
+            }
+
             empty_view.setVisibility(View.VISIBLE);
+            if (mTwoPane) {
+
+                mPosition = -1;
+                movies_gridview.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        selectGridItem(-1);
+
+                    }
+                });
+            }
 
         }
 
         //TODO
-        if (mTwoPane) {
+        /*if (mTwoPane) {
 
             mPosition = -1;
             movies_gridview.post(new Runnable() {
@@ -230,9 +238,8 @@ public class MainActivityFragment extends Fragment implements
                 }
             });
         }
-
-            if(!movies_gridview.isShown()){
-               // movieGridAdapter.swapCursor(null);
+*/
+           /* if(!movies_gridview.isShown()){
 
                 empty_view.setVisibility(View.VISIBLE);
                 mPosition = -1;
@@ -250,7 +257,7 @@ public class MainActivityFragment extends Fragment implements
                 Log.d("dirtyUIHacks",""+movies_gridview.isShown());
 
             }
-
+*/
     }
 
 
@@ -356,7 +363,7 @@ public class MainActivityFragment extends Fragment implements
         }
     }
 
-    public void initializeLoader()
+    private void initializeLoader()
     {
         getLoaderManager().initLoader(MOVIES_LOADER, null,this);
 

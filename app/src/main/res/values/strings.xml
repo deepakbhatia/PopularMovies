@@ -80,6 +80,7 @@
     <string name="refresh_spinner">Refresh</string>
     <string name="actionbar_spinner_sort">ActionBar Spinner</string>
     <string name="no_movie_details">No Movie Details</string>
+    <string name="movie_added_to_favourites">Movie Added to Favouries</string>
 
 
 </resources>

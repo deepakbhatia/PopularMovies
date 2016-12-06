@@ -595,6 +595,7 @@
     <string name="favourite">favourite</string>
     <string name="find_reviews">%1$s/reviews</string>
     <string name="find_trailer" translatable="false">%1$s/videos</string>
+    <string name="movie_added_to_favourites">Movie Added to Favouries</string>
     <string name="movie_db_api_key_param" translatable="false">api_key</string>
     <string name="movie_db_base_url" translatable="false">api.themoviedb.org/3/movie/</string>
     <string name="movie_db_poster_base_url" translatable="false">http://image.tmdb.org/t/p/</string>

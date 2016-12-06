@@ -1,6 +1,5 @@
 package com.chitrahaar.darshan;
 
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +18,9 @@ import android.widget.TextView;
 
 import com.chitrahaar.darshan.data.MovieDataContract;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 
 /**
@@ -27,8 +29,6 @@ import java.util.ArrayList;
 
 public class MovieDetailFragment extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor>, View.OnFocusChangeListener {
 
-
-    private Resources res;
 
     private MoviesViewAdapter movieContentAdapter;
 
@@ -47,26 +47,23 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
 
     };
 
-    static final int COL_MOVIE_ID = 0;
-    static final int COL_MOVIE_TITLE = 1;
-    static final int COL_RELEASEDATE = 2;
-    static final int COL_DESCRIPTION = 3;
-    static final int COL_RATING = 4;
-    public static final int COLUMN_POSTER = 5;
-    static final int COL_TYPE_LIST = 6;
-    static final int COL_IS_FAVOURITE = 8;
-    static final int COL_ORIGINAL_LANGUAGE = 9;
-    static final int COL_POSTER_BLOB = 10;
+    private static final int COL_MOVIE_ID = 0;
+    private static final int COL_MOVIE_TITLE = 1;
+    private static final int COL_RELEASEDATE = 2;
+    private static final int COL_DESCRIPTION = 3;
+    private static final int COL_RATING = 4;
+    private static final int COLUMN_POSTER = 5;
+    private static final int COL_TYPE_LIST = 6;
+    private static final int COL_IS_FAVOURITE = 8;
+    private static final int COL_ORIGINAL_LANGUAGE = 9;
+    private static final int COL_POSTER_BLOB = 10;
 
     private static final int MOVIE_DETAIL_LOADER = 1000;
-    public static Uri mUri;
+    private static Uri mUri;
 
     private View root_view;
     @Override
     public void onClick(View v) {
-
-        int view_id = v.getId();
-
 
     }
 
@@ -75,6 +72,21 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
     public MovieDetailFragment()
     {
 
+    }
+    @Subscribe
+    public void onEvent(NotifyMessage notify){
+
+        getLoaderManager().initLoader(MOVIE_DETAIL_LOADER, null, this);
+
+        /*getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // This code will always run on the UI thread, therefore is safe to modify UI elements.
+
+                movieContentAdapter.notifyDataSetChanged();
+            }
+        });
+*/
     }
 
     @CallSuper
@@ -85,8 +97,7 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
         super.onCreateView(inflater, container, savedInstanceState);
         root_view = inflater.inflate(R.layout.content_movies_detail,container,false);
 
-        res = getResources();
-
+        EventBus.getDefault().register(this);
         RecyclerView movieDetailView = (RecyclerView) root_view.findViewById(R.id.movie_detail_view);
 
 
@@ -146,6 +157,7 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
             );
         }
         else {
+
             noDetailView(true);
 
         }
@@ -168,10 +180,8 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
                     hasMovie = true;
                 }
             }
-            //if there is already a movie do nothing else add the movie to the adapter
-            if (hasMovie) {
 
-            } else {
+            if (!hasMovie)  {
                 String movieId = data.getString(COL_MOVIE_ID);
                 Movies mMovie = new Movies(
                         data.getString(COL_MOVIE_TITLE),
@@ -228,6 +238,14 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
         }
 
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+
+    }
+
     @Override
     public void onFocusChange(View view, boolean b) {
         if(!b){

@@ -7,11 +7,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.chitrahaar.darshan.R;
 
 public class MovieContentProvider extends ContentProvider {
+
     public MovieContentProvider() {
     }
 
@@ -20,15 +22,14 @@ public class MovieContentProvider extends ContentProvider {
     private MovieHelper mDbHelper;
     private static final String LOG_TAG = MovieContentProvider.class.getSimpleName();
 
-    static final int MOVIE = 100;
-    static final int MOVIE_SPECIFIC = 101;
-    static final int MOVIES_TOPRATED = 102;
-    static final int MOVIES_POPULAR = 103;
-    static final int MOVIES_FAVOURITE = 104;
+    private static final int MOVIE = 100;
+    private static final int MOVIE_SPECIFIC = 101;
+    private static final int MOVIES_TOPRATED = 102;
+    private static final int MOVIES_POPULAR = 103;
+    private static final int MOVIES_FAVOURITE = 104;
 
-    public static final int POPULAR_LIST = 1;
-    public static final int TOP_RATED_LIST = 2;
-    public static int BOTH_LIST = 3;
+    private static final int POPULAR_LIST = 1;
+    private static final int TOP_RATED_LIST = 2;
 
     private static final SQLiteQueryBuilder sMovieQueryBuilder;
 
@@ -53,7 +54,7 @@ public class MovieContentProvider extends ContentProvider {
 
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
         //define return cursor to get data
         Cursor retCursor;
@@ -78,11 +79,11 @@ public class MovieContentProvider extends ContentProvider {
                 break;
             case MOVIES_TOPRATED:
 
-                    retCursor = getCategoryMovies(uri, projection, sortOrder, ""+TOP_RATED_LIST);
+                    retCursor = getCategoryMovies(projection, sortOrder, ""+TOP_RATED_LIST);
 
                 break;
             case MOVIES_POPULAR:
-               retCursor = getCategoryMovies(uri, projection, sortOrder, ""+POPULAR_LIST);
+               retCursor = getCategoryMovies(projection, sortOrder, ""+POPULAR_LIST);
 
                 break;
             default:
@@ -97,7 +98,7 @@ public class MovieContentProvider extends ContentProvider {
 
 
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
 
         switch (sUriMatcher.match(uri)) {
             case MOVIE:
@@ -113,7 +114,7 @@ public class MovieContentProvider extends ContentProvider {
     }
 
     @Override
-    public Uri insert(Uri uri, ContentValues contentValues) {
+    public Uri insert(@NonNull Uri uri, ContentValues contentValues) {
         final SQLiteDatabase db = mDbHelper.getWritableDatabase();
         Uri returnUri;
         switch (sUriMatcher.match(uri)) {
@@ -140,7 +141,7 @@ public class MovieContentProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
+    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         //open db
         final SQLiteDatabase db = mDbHelper.getWritableDatabase();
         //initialize integer to count rowsdeleted so we can return it below
@@ -164,7 +165,7 @@ public class MovieContentProvider extends ContentProvider {
 
     //UPDATE MOVIES BASED ON SELECTION CRITERIA
     @Override
-    public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
+    public int update(@NonNull Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
         //open db
         final SQLiteDatabase db = mDbHelper.getWritableDatabase();
         //initialize integer to count number of rows updated so we can return it below
@@ -186,7 +187,7 @@ public class MovieContentProvider extends ContentProvider {
         return rowsUpdated;
     }
 
-    static UriMatcher buildUriMatcher() {
+    private static UriMatcher buildUriMatcher() {
         // 1) Create uri matcher for the movie
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = MovieDataContract.CONTENT_AUTHORITY;
@@ -221,7 +222,7 @@ public class MovieContentProvider extends ContentProvider {
     }
 
     //use this method to get a list of either toprated or popular movies
-    private Cursor getCategoryMovies(Uri uri, String[] projection, String sortOrder, String category) {
+    private Cursor getCategoryMovies(String[] projection, String sortOrder, String category) {
         String[] selectionArgs;
         selectionArgs = new String[]{category};
         String selection = sCategoryMovieSelection;

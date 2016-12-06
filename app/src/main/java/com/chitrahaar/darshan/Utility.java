@@ -11,7 +11,6 @@ import android.net.NetworkInfo;
 public class Utility {
 
     public static String sort_type = null;
-    public static int TOP_RATED_LIST = 2;
 
 
     public static boolean isNetworkAvailable(Context context) {

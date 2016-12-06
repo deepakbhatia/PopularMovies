@@ -5,7 +5,7 @@ package com.chitrahaar.darshan;
  */
 
 public class ViewHeaders {
-    private String header_title;
+    private final String header_title;
 
     public ViewHeaders(String header_title) {
         this.header_title = header_title;

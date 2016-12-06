@@ -29,7 +29,7 @@ public class DeviceRotationTest {
 
     /** Launches {@link MainActivity} for every test */
     @Rule
-    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class);
+    public final ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class);
 
     /** Checks that what has been typed into EditText is retained after screen rotation */
     @Test

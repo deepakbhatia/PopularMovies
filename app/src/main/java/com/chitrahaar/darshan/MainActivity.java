@@ -12,8 +12,7 @@ import android.view.MenuItem;
 import com.chitrahaar.darshan.syncmovies.MovieSyncAdapter;
 
 public class MainActivity extends AppCompatActivity implements
-        MainActivityFragment.Callback,
-        MainActivityFragment.EmptyInterface {
+        MainActivityFragment.Callback {
 
     private boolean mTwoPane;
 
@@ -121,11 +120,6 @@ public class MainActivity extends AppCompatActivity implements
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
-    }
-
-    @Override
-    public void setEmptyInterface() {
-        twoPaneDetailView(null);
     }
 
 }

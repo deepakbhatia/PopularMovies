@@ -79,7 +79,7 @@ public class MovieGridAdapter extends CursorAdapter {
      * Cache of the children views for a poster list item.
      */
     public static class PosterHolder {
-        public ImageView posterView;
+        public final ImageView posterView;
 
         public PosterHolder(View view) {
             posterView = (ImageView) view.findViewById(R.id.movie_image);

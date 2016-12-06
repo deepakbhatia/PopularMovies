@@ -1,5 +1,6 @@
 package com.chitrahaar.darshan;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,8 @@ import com.chitrahaar.darshan.data.MovieDataContract;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +32,6 @@ import java.util.ArrayList;
  */
 
 public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final int VIEW_TYPE_COUNT = 3;
     private static final int VIEW_TYPE_DETAIL = 0;
     private static final int VIEW_TYPE_TRAILERS = 1;
     private static final int VIEW_TYPE_REVIEWS = 2;
@@ -38,17 +40,17 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 
     // The items to display in your RecyclerView
-    private ArrayList<Object> moviesList = new ArrayList<>();
+    private final ArrayList<Object> moviesList = new ArrayList<>();
 
-    private Context mContext;
+    private final Context mContext;
 
     private ContentValues movieValues;
     private static String movieTitle;
 
     public MoviesViewAdapter(Context context) {
         this.mContext = context;
-
     }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder = null;
@@ -146,7 +148,7 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
-        TextView headerTitle;
+        final TextView headerTitle;
 
         public HeaderViewHolder(View itemView) {
             super(itemView);
@@ -193,9 +195,9 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         TextView reviewAuthor;
         TextView reviewContent;
 
-        TextView noReviewView;
+        final TextView noReviewView;
 
-        CardView reviewCard;
+        final CardView reviewCard;
 
         public ReviewViewHolder(View v) {
             super(v);
@@ -258,9 +260,9 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     //view holder for trailers
     public class TrailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private Button trailer_play;
-        private TextView no_trailer_view;
-        public ImageView shareTrailerView;
+        private final Button trailer_play;
+        private final TextView no_trailer_view;
+        public final ImageView shareTrailerView;
 
         public TrailerViewHolder(View v) {
             super(v);
@@ -436,30 +438,37 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @Override
         public void onClick(View view) {
 
+            final View v = view;
+
             if(view.getId() == R.id.movie_favourite)
             {
 
                 final Movies movie = (Movies)view.getTag();
 
                 if(movie.getFavourite().equalsIgnoreCase(mContext.getString(R.string.yes)))
-
                 {
-                    view.setContentDescription(String.format(mContext.getString(R.string.add_movie_to_favourite_content_description),movie.getMovies_title()));
                     movieValues = new ContentValues();
                     movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_IS_FAVOURITE, mContext.getString(R.string.no));
                     movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_POSTER_BLOB, new byte[0]);
-                    ((Button)view).setText(mContext.getString(R.string.add_to_favourite));
-                    updateData(movieValues,movie);
+                    int updateRecord = updateData(movieValues,movie,false);
 
+                    if(updateRecord!=0)
+                    {
+                        //Notify Activity to read from The DB Again to update Adapter
+                        EventBus.getDefault().post(new NotifyMessage(false,movie));
+                    }
+                    else {
+                        Log.e(LOG_TAG, mContext.getString(R.string.error_updating_record_favourite_movies));
+
+                    }
 
                 }else {
-                    ((Button)view).setText(mContext.getString(R.string.remove_from_favourites));
-                    view.setContentDescription(String.format(mContext.getString(R.string.remove_from_favourites_content_description),movie.getMovies_title()));
+
 
                     Thread r = new Thread() {
                         @Override
                         public void run() {
-                            Bitmap bitmap = null;
+                            Bitmap bitmap;
                             try {
                                 final RequestCreator image_load = Picasso.with(mContext)
                                         .load(mContext.getString(R.string.movie_db_poster_base_url)+mContext.getString(R.string.movies_db_poster_format)+movie.getMovies_image_url());
@@ -470,10 +479,13 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                 movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_IS_FAVOURITE, mContext.getString(R.string.yes));
                                 movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_POSTER_BLOB, baos.toByteArray());
 
-                                int updateRecord = updateData(movieValues,movie);
+                                int updateRecord = updateData(movieValues,movie,true);
+
+
                                 //check that update succeeded
                                 if (updateRecord != 0) {
 
+                                    EventBus.getDefault().post(new NotifyMessage(true,movie));
 
                                 } else {
                                     Log.e(LOG_TAG, mContext.getString(R.string.error_updating_record_favourite_movies));
@@ -486,21 +498,56 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     };
 
                     r.start();
+
                 }
             }
         }
 
+
+        private int updateData(ContentValues movieValues, final Movies movie, final boolean fav)
+        {
+            int updateRecord = mContext.getContentResolver().update(MovieDataContract.MovieDataEntry.CONTENT_URI,
+                    movieValues, MovieDataContract.MovieDataEntry._ID + " = ?",
+                    new String[]{movie.getMovie_id()});
+
+            if(updateRecord!=0)
+            {
+                final MovieViewHolder mvh = this;
+
+                ((Activity)mContext).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        mvh.getFavouriteButton().setTag(movie);
+                        if(fav)
+                        {
+                            movie.setFavourite(mContext.getString(R.string.yes));
+                            mvh.getFavouriteButton().setText(mContext.getString(R.string.remove_from_favourites));
+                            mvh.getFavouriteButton().setContentDescription(String.format(mContext.getString(R.string.remove_from_favourites_content_description),movie.getMovies_title()));
+
+                        }
+                        else
+                        {
+                            movie.setFavourite(mContext.getString(R.string.no));
+                            mvh.getFavouriteButton().setText(mContext.getString(R.string.add_to_favourite));
+                            mvh.getFavouriteButton().setContentDescription(String.format(mContext.getString(R.string.add_movie_to_favourite_content_description),movie.getMovies_title()));
+
+                        }
+                    }
+
+
+                });
+
+            }
+
+            return updateRecord;
+
+        }
+
     }
 
-    private int updateData(ContentValues movieValues, Movies movie)
-    {
-        //update
 
-        return mContext.getContentResolver().update(MovieDataContract.MovieDataEntry.CONTENT_URI,
-                movieValues, MovieDataContract.MovieDataEntry._ID + " = ?",
-                new String[]{movie.getMovie_id()});
 
-    }
 
     @Override
     public int getItemCount() {

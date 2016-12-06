@@ -26,17 +26,13 @@ public class MovieReviewTask extends AsyncTask<String, ArrayList<Object>, ArrayL
 
     private final String LOG_TAG = MovieReviewTask.class.getSimpleName();
 
-    private Context context;
+    private final Context context;
 
     HttpURLConnection urlConnection = null;
     BufferedReader reader = null;
     String reviewsJSON = null;
 
-    private boolean network_error = false;
-
-    private boolean parse_error = false;
-
-    private MoviesViewAdapter moviesViewAdapter;
+    private final MoviesViewAdapter moviesViewAdapter;
 
     public MovieReviewTask(Context context, MoviesViewAdapter moviesViewAdapter)
     {
@@ -100,17 +96,12 @@ public class MovieReviewTask extends AsyncTask<String, ArrayList<Object>, ArrayL
         }
         catch (UnknownHostException ex)
         {
-            network_error = true;
-            if(reviews == null)
-            {
-                Log.e(LOG_TAG,ex.toString());
+            Log.e(LOG_TAG,ex.toString());
 
-            }
 
         }
         catch (IOException ex)
         {
-            parse_error = true;
             Log.e(LOG_TAG,ex.toString());
         }
         return reviews;

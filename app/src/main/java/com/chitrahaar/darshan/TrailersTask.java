@@ -26,13 +26,13 @@ public class TrailersTask extends AsyncTask<String, String, ArrayList<Object>> {
 
     private final String LOG_TAG = TrailersTask.class.getSimpleName();
 
-    private Context context;
+    private final Context context;
 
     HttpURLConnection urlConnection = null;
     BufferedReader reader = null;
     String moviesJSON = null;
 
-    private MoviesViewAdapter moviesViewAdapter;
+    private final MoviesViewAdapter moviesViewAdapter;
 
     public TrailersTask(Context context, MoviesViewAdapter moviesViewAdapter)
     {
@@ -96,14 +96,12 @@ public class TrailersTask extends AsyncTask<String, String, ArrayList<Object>> {
         }
         catch (UnknownHostException ex)
         {
-            boolean network_error = true;
             trailer_list = null;
             Log.e(LOG_TAG,ex.toString());
 
         }
         catch (IOException ex)
         {
-            boolean parse_error = true;
             trailer_list = null;
             Log.e(LOG_TAG,ex.toString());
         }
