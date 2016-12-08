@@ -22,17 +22,10 @@ public class Trailer implements Parcelable{
         return mTrailerKey;
     }
 
-    public void setmTrailerKey(String mTrailerKey) {
-        this.mTrailerKey = mTrailerKey;
-    }
-
     public String getmTrailerName() {
         return mTrailerName;
     }
 
-    public void setmTrailerName(String mTrailerName) {
-        this.mTrailerName = mTrailerName;
-    }
     protected Trailer(Parcel in) {
         mTrailerKey = in.readString();
         mTrailerName = in.readString();

@@ -179,6 +179,8 @@ public class MainActivityFragment extends Fragment implements
                     if (mPosition == GridView.INVALID_POSITION )
                         mPosition = 0;
 
+                    movies_gridview.smoothScrollToPosition(mPosition);
+
                     if (mTwoPane) {
                         setTwoPane();
                     }
@@ -201,7 +203,6 @@ public class MainActivityFragment extends Fragment implements
         }
 
         if (movieCount <= 0) {
-            //movieGridAdapter.swapCursor(null);
             if(spinnerSelection == 2){
                 ((TextView) empty_view).setText(res.getString(R.string.no_favourites_message));
 
@@ -225,39 +226,6 @@ public class MainActivityFragment extends Fragment implements
 
         }
 
-        //TODO
-        /*if (mTwoPane) {
-
-            mPosition = -1;
-            movies_gridview.post(new Runnable() {
-                @Override
-                public void run() {
-
-                    selectGridItem(-1);
-
-                }
-            });
-        }
-*/
-           /* if(!movies_gridview.isShown()){
-
-                empty_view.setVisibility(View.VISIBLE);
-                mPosition = -1;
-                movies_gridview.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        //TODO
-                        //if(mTwoPane)
-                        selectGridItem(-1);
-
-                    }
-                });
-                //TODO
-                Log.d("dirtyUIHacks",""+movies_gridview.isShown());
-
-            }
-*/
     }
 
 
@@ -373,7 +341,6 @@ public class MainActivityFragment extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 
-        initializeLoader();
 
         if (savedInstanceState != null){
 
@@ -397,8 +364,12 @@ public class MainActivityFragment extends Fragment implements
             if (savedInstanceState.containsKey(SELECTED_SPINNER_KEY)) {
 
                 spinnerSelection = savedInstanceState.getInt(SELECTED_SPINNER_KEY);
-                getMovies();
+                //getMovies();
             }
+        }
+        else {
+            initializeLoader();
+
         }
 
 
@@ -418,6 +389,8 @@ public class MainActivityFragment extends Fragment implements
             outState.putInt(SELECTED_GRID_ITEM, mPosition);
 
         }
+
+        
         outState.putInt(SELECTED_SPINNER_KEY ,spinnerSelection);
 
         outState.putBoolean(getString(R.string.showing_connect_message),!Utility.isNetworkAvailable(res));

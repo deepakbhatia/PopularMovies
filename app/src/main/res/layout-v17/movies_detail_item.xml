@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/target_layout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -123,9 +122,7 @@
 
     <View
         style="@style/LineSeparatorStyle"
-        android:layout_below="@+id/movie_detail_layout"
-        android:id="@+id/trailer_separator"
-        />
+        android:layout_below="@+id/movie_detail_layout" />
 
 </RelativeLayout>
 

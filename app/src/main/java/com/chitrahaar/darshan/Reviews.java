@@ -39,16 +39,8 @@ public class Reviews implements Parcelable {
         return author;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
     public String getReview() {
         return review;
-    }
-
-    public void setReview(String review) {
-        this.review = review;
     }
 
     @Override

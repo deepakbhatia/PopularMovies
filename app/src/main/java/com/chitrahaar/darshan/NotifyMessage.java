@@ -6,10 +6,7 @@ package com.chitrahaar.darshan;
 
 public class NotifyMessage {
     boolean notify;
-    Movies movies;
-    public NotifyMessage(boolean notify,Movies movies){
+    public NotifyMessage(boolean notify){
         this.notify = notify;
-
-        this.movies = movies;
     }
 }

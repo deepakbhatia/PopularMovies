@@ -7,6 +7,11 @@
     <string name="movie_db_poster_base_url" translatable="false">http://image.tmdb.org/t/p/</string>
     <string name="popular_tag" translatable="false">popular</string>
     <string name="top_rated_tag" translatable="false">top_rated</string>
+    <string-array name="syncSort">
+        <item>@string/popular_tag</item>
+        <item>@string/top_rated_tag</item>
+    </string-array>
+
     <string name="movie_db_api_key_param" translatable="false">api_key</string>
     <string name="movies_db_results_json_tag" translatable="false">results</string>
     <string name="movies_db_results_json_poster_path" translatable="false">poster_path</string>
@@ -22,6 +27,9 @@
     <string name="Dismiss" translatable="false">DISMISS</string>
     <string name="showing_connect_message" translatable="false">showing_connect_message</string>
     <string name="youtube_watch_uri" translatable="false">https://www.youtube.com/watch?v=%1$s</string>
+
+
+
     <string name="sync_account_type">darshan.chitrahaar.com</string>
 
     <string name="title_activity_movies_detail">Movie Information</string>
@@ -35,7 +43,6 @@
     <string name="movie_detail_title_content_description">Movie title is %1$s</string>
     <string name="movie_detail_overview_content_description">Plot for movie %1$s is %2$s</string>
     <string name="movies_detail_view">Detail Movies</string>
-    <string name = "movie_poster_in_list">Movie poster for %1$s</string>
     <string name="movie_release">"Released on: %1$s"</string>
     <string name="remove_from_favourites_content_description">"Remove movie %1$s to favourites"</string>
 
@@ -47,10 +54,7 @@
         <item>Top Rated</item>
         <item>Favourite</item>
     </string-array>
-    <string-array name="syncSort">
-        <item>popular</item>
-        <item>top_rated</item>
-    </string-array>
+
     <string name="play_movie_trailer">Play Movie Trailer</string>
     <string name="play_movie_trailer_content_description">Play Trailer for %1$s</string>
     <string name="add_movie_to_favourite_content_description">Mark the movie %1$s as a favourite</string>
@@ -80,7 +84,6 @@
     <string name="refresh_spinner">Refresh</string>
     <string name="actionbar_spinner_sort">ActionBar Spinner</string>
     <string name="no_movie_details">No Movie Details</string>
-    <string name="movie_added_to_favourites">Movie Added to Favouries</string>
 
 
 </resources>

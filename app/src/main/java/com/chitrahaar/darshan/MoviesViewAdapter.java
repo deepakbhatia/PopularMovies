@@ -438,8 +438,6 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         @Override
         public void onClick(View view) {
 
-            final View v = view;
-
             if(view.getId() == R.id.movie_favourite)
             {
 
@@ -455,7 +453,7 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     if(updateRecord!=0)
                     {
                         //Notify Activity to read from The DB Again to update Adapter
-                        EventBus.getDefault().post(new NotifyMessage(false,movie));
+                        EventBus.getDefault().post(new NotifyMessage(true));
                     }
                     else {
                         Log.e(LOG_TAG, mContext.getString(R.string.error_updating_record_favourite_movies));
@@ -485,7 +483,7 @@ public class MoviesViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                                 //check that update succeeded
                                 if (updateRecord != 0) {
 
-                                    EventBus.getDefault().post(new NotifyMessage(true,movie));
+                                    EventBus.getDefault().post(new NotifyMessage(true));
 
                                 } else {
                                     Log.e(LOG_TAG, mContext.getString(R.string.error_updating_record_favourite_movies));

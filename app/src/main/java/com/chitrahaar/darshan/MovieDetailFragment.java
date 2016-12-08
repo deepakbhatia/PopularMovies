@@ -73,9 +73,11 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
     {
 
     }
+    //Method is called When MoviesViewAdapter fires event to notify og change in favourites for movie
     @Subscribe
     public void onEvent(NotifyMessage notify){
 
+        if(notify.notify)
         getLoaderManager().initLoader(MOVIE_DETAIL_LOADER, null, this);
 
         /*getActivity().runOnUiThread(new Runnable() {

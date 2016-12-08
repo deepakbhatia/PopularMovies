@@ -42,8 +42,6 @@
             android:contentDescription="@string/share_trailer"/>
     </LinearLayout>
     <View
-        style="@style/LineSeparatorStyle"
-        android:id="@+id/trailer_separator"
-        />
+        style="@style/LineSeparatorStyle" />
 
 </LinearLayout>

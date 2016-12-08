@@ -5,29 +5,29 @@
     density="xhdpi"
     format="8"
     plugin-version="2.2.2"
-    timestamp="477359221464644"
+    timestamp="568339163525369"
     token="-8313887640868224818"
     verifier="FULL_BUILD_REQUESTED" >
 
     <task
         name="javac"
-        duration="1394" />
+        duration="1751" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="632" />
+        duration="37" />
     <task
         name="verifier"
-        duration="56" />
+        duration="1" />
 
     <artifact
         location="/Users/obelix/Documents/udacity_code/PopularMovies/app/build/outputs/apk/app-debug.apk"
         type="MAIN" />
 
     <build
-        timestamp="477359221464644"
+        timestamp="568339163525369"
         verifier="FULL_BUILD_REQUESTED" >
         <artifact
             location="/Users/obelix/Documents/udacity_code/PopularMovies/app/build/outputs/apk/app-debug.apk"
