@@ -27,7 +27,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.chitrahaar.darshan.data.MovieDataContract;
-import com.chitrahaar.darshan.syncmovies.MovieSyncAdapter;
 
 /**
  * Fragment for displaying movie grid
@@ -45,7 +44,7 @@ public class MainActivityFragment extends Fragment implements
     private GridView movies_gridview;
 
 
-    private static MovieGridAdapter movieGridAdapter;
+    private  MovieGridAdapter movieGridAdapter;
 
     private View empty_view;//View to Load when there is no internet connection
 
@@ -123,7 +122,8 @@ public class MainActivityFragment extends Fragment implements
                 MOVIE_COLUMNS,
                 null,
                 null,
-                null);
+                MovieDataContract.MovieDataEntry.COLUMN_MOVIE_TITLE
+                );
     }
 
     private void selectGridItem(int position){
@@ -153,7 +153,7 @@ public class MainActivityFragment extends Fragment implements
     private void setTwoPane(){
         selectGridItem(mPosition);
         movies_gridview.smoothScrollToPosition(mPosition);
-        movies_gridview.setItemChecked(mPosition,true);
+        //movies_gridview.setItemChecked(mPosition,true);
     }
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
@@ -301,6 +301,8 @@ public class MainActivityFragment extends Fragment implements
         SELECTED_GRID_ITEM = res.getString(R.string.current_grid_item);
         SELECTED_SPINNER_KEY = res.getString(R.string.current_spinner_item);
 
+        initializeLoader();
+
         return root_view;
     }
 
@@ -366,12 +368,8 @@ public class MainActivityFragment extends Fragment implements
                 spinnerSelection = savedInstanceState.getInt(SELECTED_SPINNER_KEY);
                 //getMovies();
             }
+        }else{
         }
-        else {
-            initializeLoader();
-
-        }
-
 
         super.onActivityCreated(savedInstanceState);
 
@@ -390,7 +388,7 @@ public class MainActivityFragment extends Fragment implements
 
         }
 
-        
+
         outState.putInt(SELECTED_SPINNER_KEY ,spinnerSelection);
 
         outState.putBoolean(getString(R.string.showing_connect_message),!Utility.isNetworkAvailable(res));
@@ -408,7 +406,7 @@ public class MainActivityFragment extends Fragment implements
 
     private void getMovies(){
 
-       String sortPref = null;
+        String sortPref = null;
         if (spinnerSelection == 0) {
             Utility.sort_type = (res.getString(R.string.popular_tag));
             sortPref =res.getString(R.string.popular_tag);
@@ -442,23 +440,17 @@ public class MainActivityFragment extends Fragment implements
 
     private void updateMovieList()
     {
-
-        getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
-
         SharedPreferences sortPreferences = res.getSharedPreferences(getString(R.string.sortPreferences),Context.MODE_PRIVATE);
 
         String sortPref = sortPreferences.getString(getString(R.string.currentPreferences),getString(R.string.popular_tag));
 
-        MovieSyncAdapter.syncImmediately(getActivity(),sortPref);
+        Utility.sort_type = sortPref;
 
-       /* if(Utility.isNetworkAvailable(getActivity()) || spinnerSelection == 2)
-        {
+        getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
 
-        }else {
-            onLoaderReset(null);
-        }
-*/
 
+        //MovieSyncAdapter.syncImmediately(getActivity(),getString(R.string.popular_tag));
+        //MovieSyncAdapter.syncImmediately(getActivity(),getString(R.string.top_rated_tag));
 
     }
 

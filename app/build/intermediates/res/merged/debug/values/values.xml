@@ -515,7 +515,7 @@
     <dimen name="design_tab_text_size_2line">12sp</dimen>
     <item format="float" name="disabled_alpha_material_dark" type="dimen">0.30</item>
     <item format="float" name="disabled_alpha_material_light" type="dimen">0.26</item>
-    <dimen name="element_margin">8dp</dimen>
+    <dimen name="element_margin">2dp</dimen>
     <item format="float" name="highlight_alpha_material_colored" type="dimen">0.26</item>
     <item format="float" name="highlight_alpha_material_dark" type="dimen">0.20</item>
     <item format="float" name="highlight_alpha_material_light" type="dimen">0.12</item>
@@ -590,6 +590,7 @@
     <string name="currentPreferences">currentPreferences</string>
     <string name="current_grid_item" translatable="false">current_grid_item</string>
     <string name="current_spinner_item" translatable="false">current_spinner_item</string>
+    <string name="error_insert_row">"Failed to insert row into "</string>
     <string name="error_updating_record_favourite_movies">Failed to update the record with favourite movies</string>
     <string name="failed_to_update_record">Failed to update the record</string>
     <string name="favourite">favourite</string>

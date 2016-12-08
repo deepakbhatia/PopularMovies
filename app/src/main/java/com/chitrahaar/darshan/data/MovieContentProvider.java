@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.chitrahaar.darshan.R;
 
@@ -30,6 +29,8 @@ public class MovieContentProvider extends ContentProvider {
 
     private static final int POPULAR_LIST = 1;
     private static final int TOP_RATED_LIST = 2;
+    private static final int BOTH_LIST = 3;
+
 
     private static final SQLiteQueryBuilder sMovieQueryBuilder;
 
@@ -41,6 +42,7 @@ public class MovieContentProvider extends ContentProvider {
     private static final String sSpecificMovieSelection = MovieDataContract.MovieDataEntry.TABLE_NAME +
             "." + MovieDataContract.MovieDataEntry._ID + " = ? ";
     private static final String sCategoryMovieSelection = MovieDataContract.MovieDataEntry.TABLE_NAME +
+            "." + MovieDataContract.MovieDataEntry.COLUMN_TYPE_LIST + " = ? "+"OR "+MovieDataContract.MovieDataEntry.TABLE_NAME +
             "." + MovieDataContract.MovieDataEntry.COLUMN_TYPE_LIST + " = ? ";
     private static final String sIsFavouriteMovieSelection = MovieDataContract.MovieDataEntry.TABLE_NAME +
             "." + MovieDataContract.MovieDataEntry.COLUMN_IS_FAVOURITE + " = ? ";
@@ -58,6 +60,7 @@ public class MovieContentProvider extends ContentProvider {
                         String sortOrder) {
         //define return cursor to get data
         Cursor retCursor;
+        String[] selectionArguments;
         switch (sUriMatcher.match(uri)) {
             //in case of movie we want to load the correct data
             case MOVIE:
@@ -79,11 +82,14 @@ public class MovieContentProvider extends ContentProvider {
                 break;
             case MOVIES_TOPRATED:
 
-                    retCursor = getCategoryMovies(projection, sortOrder, ""+TOP_RATED_LIST);
+                selectionArguments = new String[]{""+TOP_RATED_LIST,""+BOTH_LIST};
+                    retCursor = getCategoryMovies(projection, sortOrder, selectionArguments);
 
                 break;
             case MOVIES_POPULAR:
-               retCursor = getCategoryMovies(projection, sortOrder, ""+POPULAR_LIST);
+
+                selectionArguments = new String[]{""+POPULAR_LIST,""+BOTH_LIST};
+               retCursor = getCategoryMovies(projection, sortOrder, selectionArguments);
 
                 break;
             default:
@@ -127,7 +133,7 @@ public class MovieContentProvider extends ContentProvider {
                     returnUri = MovieDataContract.MovieDataEntry.buildMovieUri(_id);
                     //throw sql exception
                 else
-                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException(getContext().getString(R.string.error_insert_row) + uri);
                 break;
 
             default:
@@ -209,7 +215,6 @@ public class MovieContentProvider extends ContentProvider {
         String mSpecificMovie = MovieDataContract.MovieDataEntry.getMovieIdFromUri(uri);
 
         selectionArgs = new String[]{mSpecificMovie};
-        Log.v(LOG_TAG, "" + mSpecificMovie);
         String selection = sSpecificMovieSelection;
         return sMovieQueryBuilder.query(mDbHelper.getReadableDatabase(),
                 projection,
@@ -222,9 +227,8 @@ public class MovieContentProvider extends ContentProvider {
     }
 
     //use this method to get a list of either toprated or popular movies
-    private Cursor getCategoryMovies(String[] projection, String sortOrder, String category) {
-        String[] selectionArgs;
-        selectionArgs = new String[]{category};
+    private Cursor getCategoryMovies(String[] projection, String sortOrder,String[] selectionArgs) {
+        ;
         String selection = sCategoryMovieSelection;
         return sMovieQueryBuilder.query(mDbHelper.getReadableDatabase(),
                 projection,

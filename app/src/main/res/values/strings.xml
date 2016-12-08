@@ -84,6 +84,7 @@
     <string name="refresh_spinner">Refresh</string>
     <string name="actionbar_spinner_sort">ActionBar Spinner</string>
     <string name="no_movie_details">No Movie Details</string>
+    <string name="error_insert_row">"Failed to insert row into "</string>
 
 
 </resources>

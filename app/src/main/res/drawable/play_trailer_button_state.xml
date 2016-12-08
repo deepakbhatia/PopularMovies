@@ -6,7 +6,5 @@
     <item android:state_pressed="true"
         android:drawable="@color/colorAccentPressed" />
 
-
-
     <!-- Default, "just hangin' out" state. -->
 </selector>

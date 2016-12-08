@@ -41,7 +41,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private final String LOG_TAG = MovieSyncAdapter.class.getSimpleName();
 
-    private static final int SYNC_INTERVAL = 60 * 180;
+    private static final int SYNC_INTERVAL = 60 * 1440;//Regular Sync Once a Day
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
 
     private int sortType;
@@ -143,15 +143,18 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
         String syncNow = bundle.getString(getContext().getString(R.string.sortPref));
 
+
         if(syncNow == null)
         {
             String[] sortBy = getContext().getResources().getStringArray(R.array.syncSort);
 
             for (String aSortBy : sortBy) {
+
                 syncAction(aSortBy);
             }
         }
         else{
+
             if(syncNow.equals(getContext().getString(R.string.favourite)))
                 return;
             syncAction(syncNow);
@@ -279,18 +282,20 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
                     movieValues, MovieDataContract.MovieDataEntry._ID + " = ?",
                     new String[]{movieID});
 
+            movieCursor.close();
+
             //check that update succeeded
             if (updateRecord != 0){
                 return true;
             }else{
                 Log.e(LOG_TAG, getContext().getString(R.string.failed_to_update_record));
-                movieCursor.close();
                 return false;
             }
 
 
         }else {
             // add the values in the database
+
             ContentValues movieValues = new ContentValues();
             movieValues.put(MovieDataContract.MovieDataEntry._ID, mMovie.getMovie_id());
             movieValues.put(MovieDataContract.MovieDataEntry.COLUMN_MOVIE_TITLE, mMovie.getMovies_title());
@@ -309,6 +314,9 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
             Uri insertUri=getContext().getContentResolver().insert(MovieDataContract.MovieDataEntry.CONTENT_URI,
                     movieValues);
 
+            if(insertUri!=null){
+            }
+            movieCursor.close();
             return true;
         }
     }
@@ -374,21 +382,23 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     private static void onAccountCreated(Account newAccount, Context context) {
-        /*
-         * Since we've created an account
-         */
-        //MovieSyncAdapter.configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
-
-        /*
-         * Without calling setSyncAutomatically, our periodic sync will not be enabled.
-         */
-        ContentResolver.setSyncAutomatically(newAccount, context.getString(R.string.content_authority), true);
 
         /*
          * Finally, let's do a sync to get things started
          */
         syncImmediately(context,context.getResources().getString(R.string.popular_tag));
         syncImmediately(context,context.getResources().getString(R.string.top_rated_tag));
+
+         /*
+         * Since we've created an account
+         */
+        MovieSyncAdapter.configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
+
+        /*
+         * Without calling setSyncAutomatically, our periodic sync will not be enabled.
+         */
+        ContentResolver.setSyncAutomatically(newAccount, context.getString(R.string.content_authority), true);
+
 
     }
 
