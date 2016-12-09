@@ -2,12 +2,12 @@
 <instant-run
     abi="x86"
     api-level="24"
-    density="xhdpi"
+    density="560dpi"
     format="8"
     plugin-version="2.2.2"
-    timestamp="594550713369298"
+    timestamp="597800818098256"
     token="-8313887640868224818"
-    verifier="COMPATIBLE" >
+    verifier="COLD_SWAP_REQUESTED" >
 
     <task
         name="javac"
@@ -27,36 +27,15 @@
         type="RESOURCES" />
 
     <build
-        timestamp="591136180618904"
+        timestamp="597468744993124"
         verifier="FULL_BUILD_REQUESTED" >
         <artifact
             location="/Users/obelix/Documents/udacity_code/PopularMovies/app/build/outputs/apk/app-debug.apk"
             type="MAIN" />
     </build>
     <build
-        timestamp="593212001959898"
-        verifier="COMPATIBLE" >
-        <artifact
-            location="/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/builds/debug/593212001959898/classes.dex"
-            type="RELOAD_DEX" />
-    </build>
-    <build
-        timestamp="593358431978270"
-        verifier="COMPATIBLE" >
-        <artifact
-            location="/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/builds/debug/593358431978270/classes.dex"
-            type="RELOAD_DEX" />
-    </build>
-    <build
-        timestamp="593947579726852"
-        verifier="COMPATIBLE" >
-        <artifact
-            location="/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/builds/debug/593947579726852/classes.dex"
-            type="RELOAD_DEX" />
-    </build>
-    <build
-        timestamp="594550713369298"
-        verifier="COMPATIBLE" >
+        timestamp="597800818098256"
+        verifier="COLD_SWAP_REQUESTED" >
         <artifact
             location="/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/instant-run-resources/resources-debug.ir.ap_"
             type="RESOURCES" />

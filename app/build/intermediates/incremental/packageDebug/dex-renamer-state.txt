@@ -1,4 +1,4 @@
-#Thu Dec 08 23:50:13 CET 2016
+#Fri Dec 09 01:35:42 CET 2016
 base.0=/Users/obelix/Documents/udacity_code/PopularMovies/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_13abcf21e62eb358f90a25caa4fb092c05346881
 renamed.1=classes.dex
 renamed.0=classes2.dex
