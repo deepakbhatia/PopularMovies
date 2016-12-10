@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
@@ -151,9 +152,12 @@ public class MainActivityFragment extends Fragment implements
     }
 
     private void setTwoPane(){
+
         selectGridItem(mPosition);
         movies_gridview.smoothScrollToPosition(mPosition);
-        //movies_gridview.setItemChecked(mPosition,true);
+        movies_gridview.setItemChecked(mPosition,true);
+        movies_gridview.setActivated(true);
+
     }
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
@@ -183,6 +187,11 @@ public class MainActivityFragment extends Fragment implements
 
                     if (mTwoPane) {
                         setTwoPane();
+
+                    }
+                    else
+                    {
+                        movies_gridview.setChoiceMode(AbsListView.CHOICE_MODE_NONE);
                     }
                 }
             });
