@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
  */
 
 public class MovieGridAdapter extends CursorAdapter {
+
     public MovieGridAdapter(Context context) {
         super(context, null, 0);
     }
@@ -90,6 +91,12 @@ public class MovieGridAdapter extends CursorAdapter {
     @Override
     public int getViewTypeCount() {
         return 1;
+    }
+
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        return super.getView(position, convertView, parent);
     }
 
     @Override

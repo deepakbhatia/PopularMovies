@@ -41,7 +41,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private final String LOG_TAG = MovieSyncAdapter.class.getSimpleName();
 
-    private static final int SYNC_INTERVAL = 60 * 1440;//Regular Sync Once a Day
+    private static final int SYNC_INTERVAL = 60 * 180;//Regular Sync Once a Day
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL/3;
 
     private int sortType;
@@ -157,6 +157,7 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
             if(syncNow.equals(getContext().getString(R.string.favourite)))
                 return;
+
             syncAction(syncNow);
         }
 
@@ -334,11 +335,16 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
         // If the password doesn't exist, the account doesn't exist
         if ( null == accountManager.getPassword(newAccount) ) {
 
+            Log.d("syncnow","newAccount:nopass");
+
         /*
          * Add the account and account type, no password or user data
          * If successful, return the Account object, otherwise report an error.
          */
             if (!accountManager.addAccountExplicitly(newAccount, "", null)) {
+
+                Log.d("syncnow","newAccount:null");
+
                 return null;
             }
             /*
@@ -347,6 +353,9 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
              * then call ContentResolver.setIsSyncable(account, AUTHORITY, 1)
              * here.
              */
+
+            Log.d("syncnow","newAccount:onAccountCreated");
+
 
             onAccountCreated(newAccount, context);
         }
@@ -383,26 +392,31 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
 
     private static void onAccountCreated(Account newAccount, Context context) {
 
-        /*
-         * Finally, let's do a sync to get things started
-         */
-        syncImmediately(context,context.getResources().getString(R.string.popular_tag));
-        syncImmediately(context,context.getResources().getString(R.string.top_rated_tag));
-
          /*
          * Since we've created an account
          */
+
         MovieSyncAdapter.configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
+
 
         /*
          * Without calling setSyncAutomatically, our periodic sync will not be enabled.
          */
         ContentResolver.setSyncAutomatically(newAccount, context.getString(R.string.content_authority), true);
 
+        /*
+         * Finally, let's do a sync to get things started
+         */
+        syncImmediately(context,context.getResources().getString(R.string.popular_tag));
+
+        syncImmediately(context,context.getResources().getString(R.string.top_rated_tag));
+
+
 
     }
 
     public static void initializeSyncAdapter(Context context) {
+
         getSyncAccount(context);
     }
 }

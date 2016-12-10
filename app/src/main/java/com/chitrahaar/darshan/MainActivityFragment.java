@@ -100,7 +100,6 @@ public class MainActivityFragment extends Fragment implements
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String listQuery = Utility.sort_type;
-
         String destinatioUri;
         if(listQuery.equals(res.getString(R.string.popular_tag))) {
             destinatioUri = res.getString(R.string.popular_tag);
@@ -144,7 +143,6 @@ public class MainActivityFragment extends Fragment implements
 
                 movies_gridview.setSelection(position);
 
-
             }
         }
 
@@ -153,7 +151,7 @@ public class MainActivityFragment extends Fragment implements
     private void setTwoPane(){
         selectGridItem(mPosition);
         movies_gridview.smoothScrollToPosition(mPosition);
-        //movies_gridview.setItemChecked(mPosition,true);
+        movies_gridview.setItemChecked(mPosition,true);
     }
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
@@ -187,7 +185,6 @@ public class MainActivityFragment extends Fragment implements
                 }
             });
         }
-
         networkUnAvailabilityUIChanges();
         dirtyUIHacks();
     }
@@ -203,7 +200,12 @@ public class MainActivityFragment extends Fragment implements
         }
 
         if (movieCount <= 0) {
-            if(spinnerSelection == 2){
+
+            ((TextView) empty_view).setText(res.getString(R.string.no_movie_data_available));
+            ((TextView) empty_view).setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+
+
+        if(spinnerSelection == 2){
                 ((TextView) empty_view).setText(res.getString(R.string.no_favourites_message));
 
                 ((TextView) empty_view).setCompoundDrawablesWithIntrinsicBounds(null, null, null, getActivity().getResources().getDrawable(R.mipmap.ic_no_favourites));
