@@ -331,6 +331,7 @@ public class MainActivityFragment extends Fragment implements
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+        networkUnAvailabilityUIChanges();
         Cursor cursor = (Cursor) parent.getItemAtPosition(position);
         if (cursor != null) {
             mPosition = position;

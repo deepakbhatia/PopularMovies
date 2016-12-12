@@ -5,6 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorAccentPressed">#F8BBD0</color>
     <color name="colorPrimaryText">@android:color/black</color>
-    <color name="colorItemPressed">#82B1FF</color>
     <color name="colorItemSelected">#F8BBD0</color>
 </resources>

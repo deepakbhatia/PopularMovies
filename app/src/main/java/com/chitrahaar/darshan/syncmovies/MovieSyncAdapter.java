@@ -211,9 +211,6 @@ public class MovieSyncAdapter extends AbstractThreadedSyncAdapter {
                 //movies_list.add(movie);
             }
 
-            /*Movies test_movie = new Movies("Maana","/z4x0Bp48ar3Mda8KiPD1vwSY3D8.jpg","ababa",6.7,"en","2016-08-10");
-            test_movie.setMovie_id("324786");
-            insertMoviedata(test_movie,dayTime.setJulianDay(julianStartDay+25));*/
             deleteEntries();
         } catch (JSONException e) {
             e.printStackTrace();

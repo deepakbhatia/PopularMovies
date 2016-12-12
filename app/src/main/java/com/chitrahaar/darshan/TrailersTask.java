@@ -3,7 +3,6 @@ package com.chitrahaar.darshan;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,7 +46,7 @@ public class TrailersTask extends AsyncTask<String, String, ArrayList<Object>> {
         String video_id = params[0];
         String url_string = String.format(context.getString(R.string.movie_db_base_url)+context.getString(R.string.find_trailer),video_id);
 
-        ArrayList<Object> trailer_list;
+        ArrayList<Object> trailer_list = null;
 
         try{
             Uri.Builder builder = new Uri.Builder();
@@ -96,14 +95,12 @@ public class TrailersTask extends AsyncTask<String, String, ArrayList<Object>> {
         }
         catch (UnknownHostException ex)
         {
-            trailer_list = null;
-            Log.e(LOG_TAG,ex.toString());
+            //Log.e(LOG_TAG,ex.toString());
 
         }
         catch (IOException ex)
         {
-            trailer_list = null;
-            Log.e(LOG_TAG,ex.toString());
+            //Log.e(LOG_TAG,ex.toString());
         }
         return trailer_list;
     }

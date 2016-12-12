@@ -228,7 +228,7 @@ public class MovieContentProvider extends ContentProvider {
 
     //use this method to get a list of either toprated or popular movies
     private Cursor getCategoryMovies(String[] projection, String sortOrder,String[] selectionArgs) {
-        ;
+
         String selection = sCategoryMovieSelection;
         return sMovieQueryBuilder.query(mDbHelper.getReadableDatabase(),
                 projection,

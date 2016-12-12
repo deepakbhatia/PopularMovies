@@ -3,7 +3,6 @@ package com.chitrahaar.darshan;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -68,6 +67,8 @@ public class MovieReviewTask extends AsyncTask<String, ArrayList<Object>, ArrayL
             urlConnection.connect();
 
 
+
+
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
             StringBuilder buffer = new StringBuilder();
@@ -96,13 +97,13 @@ public class MovieReviewTask extends AsyncTask<String, ArrayList<Object>, ArrayL
         }
         catch (UnknownHostException ex)
         {
-            Log.e(LOG_TAG,ex.toString());
+            //Log.e(LOG_TAG,ex.toString());
 
 
         }
         catch (IOException ex)
         {
-            Log.e(LOG_TAG,ex.toString());
+            //Log.e(LOG_TAG,ex.toString());
         }
         return reviews;
     }
@@ -136,7 +137,7 @@ public class MovieReviewTask extends AsyncTask<String, ArrayList<Object>, ArrayL
 
         } catch (JSONException e) {
             reviewsList = null;
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
         return reviewsList;
