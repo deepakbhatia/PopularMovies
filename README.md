@@ -9,6 +9,8 @@ it.buildConfigField 'String', 'MOVIE_API_KEY', '"VALUE"'.   PLEASE KEEP BOTH THE
 
 -- Content Providers
 
+-- Picasso
+
 -- Espresso UI Testing
 
 -- Sync Adapters
